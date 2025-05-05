@@ -4,6 +4,7 @@ const devCerts = require("office-addin-dev-certs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+const Dotenv = require('dotenv-webpack');
 
 const urlDev = "https://localhost:/";
 const urlProd = "https://www.embark.com/"; // CHANGE THIS TO YOUR PRODUCTION DEPLOYMENT LOCATION
@@ -28,6 +29,14 @@ module.exports = async (env, options) => {
     },
     resolve: {
       extensions: [".ts", ".tsx", ".html", ".js"],
+      fallback: {
+        "os": require.resolve("os-browserify/browser"),
+        "crypto": require.resolve("crypto-browserify"),
+        "path": require.resolve("path-browserify"),
+        "fs": false,
+        "buffer": require.resolve("buffer/"),
+        "stream": require.resolve("stream-browserify")
+      }
     },
     module: {
       rules: [
@@ -52,6 +61,19 @@ module.exports = async (env, options) => {
           use: "html-loader",
         },
         {
+          test: /\.css$/i,
+          use: [
+            "style-loader", 
+            {
+              loader: "css-loader",
+              options: {
+                importLoaders: 1,
+                sourceMap: dev
+              }
+            }
+          ],
+        },
+        {
           test: /\.(png|jpg|jpeg|ttf|woff|woff2|gif|ico)$/,
           type: "asset/resource",
           generator: {
@@ -65,6 +87,10 @@ module.exports = async (env, options) => {
         patterns: [
           {
             from: "assets/*",
+            to: "assets/[name][ext][query]",
+          },
+          {
+            from: "src/taskpane/assets/*",
             to: "assets/[name][ext][query]",
           },
           {
@@ -92,6 +118,11 @@ module.exports = async (env, options) => {
       }),
       new webpack.ProvidePlugin({
         Promise: ["es6-promise", "Promise"],
+        Buffer: ["buffer", "Buffer"],
+        process: "process/browser"
+      }),
+      new Dotenv({
+        systemvars: true, // Load all system environment variables as well
       }),
     ],
     devServer: {

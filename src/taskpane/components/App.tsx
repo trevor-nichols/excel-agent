@@ -1,9 +1,9 @@
 import * as React from "react";
 import { makeStyles, Spinner } from "@fluentui/react-components";
-import Header from "./Header";
-import ChatInterface from "./ChatInterface";
+import Header from "./shared/Header";
+import ChatInterface from "./chat/ChatInterface";
 import SettingsPanel from "./SettingsPanel";
-import SplashScreen from "./SplashScreen";
+import SplashScreen from "./shared/SplashScreen";
 import { useState, useEffect } from "react";
 
 interface AppProps {

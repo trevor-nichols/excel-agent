@@ -1,0 +1,188 @@
+Classes,Class Description
+Excel.AllowEditRange,"Represents an AllowEditRange object found in a worksheet. This object works with worksheet protection properties. When worksheet protection is enabled, an AllowEditRange object can be used to allow editing of a specific range, while maintaining protection on the rest of the worksheet."
+Excel.AllowEditRangeCollection,"Represents the set of AllowEditRange objects found in a worksheet. AllowEditRange objects work with worksheet protection properties. When worksheet protection is enabled, an AllowEditRange object can be used to allow editing of a specific range, while maintaining protection on the rest of the worksheet."
+Excel.Application,Represents the Excel application that manages the workbook.
+Excel.AutoFilter,Represents the AutoFilter object. AutoFilter turns the values in Excel column into specific filters based on the cell contents.
+Excel.Binding,Represents an Office.js binding that is defined in the workbook.
+Excel.BindingCollection,Represents the collection of all the binding objects that are part of the workbook.
+Excel.CellValueConditionalFormat,Represents a cell value conditional format.
+Excel.Chart,"Represents a chart object in a workbook. To learn more about the chart object model, see Work with charts using the Excel JavaScript API."
+Excel.ChartAreaFormat,Encapsulates the format properties for the overall chart area.
+Excel.ChartAxes,Represents the chart axes.
+Excel.ChartAxis,Represents a single axis in a chart.
+Excel.ChartAxisFormat,Encapsulates the format properties for the chart axis.
+Excel.ChartAxisTitle,Represents the title of a chart axis.
+Excel.ChartAxisTitleFormat,Represents the chart axis title formatting.
+Excel.ChartBinOptions,Encapsulates the bin options for histogram charts and pareto charts.
+Excel.ChartBorder,Represents the border formatting of a chart element.
+Excel.ChartBoxwhiskerOptions,Represents the properties of a box and whisker chart.
+Excel.ChartCollection,A collection of all the chart objects on a worksheet.
+Excel.ChartDataLabel,Represents the data label of a chart point.
+Excel.ChartDataLabelFormat,Encapsulates the format properties for the chart data labels.
+Excel.ChartDataLabels,Represents a collection of all the data labels on a chart point.
+Excel.ChartDataTable,Represents the data table object of a chart.
+Excel.ChartDataTableFormat,Represents the format of a chart data table.
+Excel.ChartErrorBars,This object represents the attributes for a chart's error bars.
+Excel.ChartErrorBarsFormat,Encapsulates the format properties for chart error bars.
+Excel.ChartFill,Represents the fill formatting for a chart element.
+Excel.ChartFont,"This object represents the font attributes (such as font name, font size, and color) for a chart object."
+Excel.ChartFormatString,"Represents the substring in chart related objects that contain text, like a ChartTitle object or ChartAxisTitle object."
+Excel.ChartGridlines,Represents major or minor gridlines on a chart axis.
+Excel.ChartGridlinesFormat,Encapsulates the format properties for chart gridlines.
+Excel.ChartLegend,Represents the legend in a chart.
+Excel.ChartLegendEntry,Represents the legend entry in legendEntryCollection.
+Excel.ChartLegendEntryCollection,Represents a collection of legend entries.
+Excel.ChartLegendFormat,Encapsulates the format properties of a chart legend.
+Excel.ChartLineFormat,Encapsulates the formatting options for line elements.
+Excel.ChartMapOptions,Encapsulates the properties for a region map chart.
+Excel.ChartPivotOptions,Encapsulates the options for the pivot chart.
+Excel.ChartPlotArea,This object represents the attributes for a chart plot area.
+Excel.ChartPlotAreaFormat,Represents the format properties for a chart plot area.
+Excel.ChartPoint,Represents a point of a series in a chart.
+Excel.ChartPointFormat,Represents the formatting object for chart points.
+Excel.ChartPointsCollection,A collection of all the chart points within a series inside a chart.
+Excel.ChartSeries,Represents a series in a chart.
+Excel.ChartSeriesCollection,Represents a collection of chart series.
+Excel.ChartSeriesFormat,Encapsulates the format properties for the chart series
+Excel.ChartTitle,Represents a chart title object of a chart.
+Excel.ChartTitleFormat,Provides access to the formatting options for a chart title.
+Excel.ChartTrendline,This object represents the attributes for a chart trendline object.
+Excel.ChartTrendlineCollection,Represents a collection of chart trendlines.
+Excel.ChartTrendlineFormat,Represents the format properties for the chart trendline.
+Excel.ChartTrendlineLabel,This object represents the attributes for a chart trendline label object.
+Excel.ChartTrendlineLabelFormat,Encapsulates the format properties for the chart trendline label.
+Excel.ColorScaleConditionalFormat,Represents the color scale criteria for conditional formatting.
+Excel.Comment,Represents a comment in the workbook.
+Excel.CommentCollection,Represents a collection of comment objects that are part of the workbook.
+Excel.CommentReply,Represents a comment reply in the workbook.
+Excel.CommentReplyCollection,Represents a collection of comment reply objects that are part of the comment.
+Excel.ConditionalDataBarNegativeFormat,Represents a conditional format for the negative side of the data bar.
+Excel.ConditionalDataBarPositiveFormat,Represents a conditional format for the positive side of the data bar.
+Excel.ConditionalFormat,"An object encapsulating a conditional format's range, format, rule, and other properties. To learn more about the conditional formatting object model, read Apply conditional formatting to Excel ranges."
+Excel.ConditionalFormatCollection,Represents a collection of all the conditional formats that are overlap the range.
+Excel.ConditionalFormatRule,"Represents a rule, for all traditional rule/format pairings."
+Excel.ConditionalRangeBorder,Represents the border of an object.
+Excel.ConditionalRangeBorderCollection,Represents the border objects that make up range border.
+Excel.ConditionalRangeFill,Represents the background of a conditional range object.
+Excel.ConditionalRangeFont,"This object represents the font attributes (font style, color, etc.) for an object."
+Excel.ConditionalRangeFormat,"A format object encapsulating the conditional formats range's font, fill, borders, and other properties."
+Excel.CultureInfo,"Provides information based on current system culture settings. This includes the culture names, number formatting, and other culturally dependent settings."
+Excel.CustomConditionalFormat,Represents a custom conditional format type.
+Excel.CustomProperty,Represents a custom property.
+Excel.CustomPropertyCollection,Contains the collection of custom properties.
+Excel.CustomXmlPart,Represents a custom XML part object in a workbook.
+Excel.CustomXmlPartCollection,A collection of custom XML parts.
+Excel.CustomXmlPartScopedCollection,"A scoped collection of custom XML parts. A scoped collection is the result of some operation (e.g., filtering by namespace). A scoped collection cannot be scoped any further."
+Excel.DataBarConditionalFormat,Represents an Excel conditional data bar type.
+Excel.DataConnectionCollection,Represents a collection of all the data connections that are part of the workbook.
+Excel.DataPivotHierarchy,Represents the Excel DataPivotHierarchy.
+Excel.DataPivotHierarchyCollection,Represents a collection of DataPivotHierarchy items associated with the PivotTable.
+Excel.DataValidation,"Represents the data validation applied to the current range. To learn more about the data validation object model, read Add data validation to Excel ranges."
+Excel.DatetimeFormatInfo,Defines the culturally appropriate format of displaying numbers. This is based on current system culture settings.
+Excel.DocumentProperties,Represents workbook properties.
+Excel.DocumentTask,Represents a task.
+Excel.DocumentTaskChange,Represents a recorded change to the task.
+Excel.DocumentTaskChangeCollection,Represents a collection of change records for a task.
+Excel.DocumentTaskCollection,Represents a collection of tasks.
+Excel.Filter,Manages the filtering of a table's column.
+Excel.FilterPivotHierarchy,Represents the Excel FilterPivotHierarchy.
+Excel.FilterPivotHierarchyCollection,Represents a collection of FilterPivotHierarchy items associated with the PivotTable.
+Excel.FormatProtection,Represents the format protection of a range object.
+Excel.FunctionResult,An object containing the result of a function-evaluation operation
+Excel.Functions,An object for evaluating Excel functions.
+Excel.GeometricShape,"Represents a geometric shape inside a worksheet. A geometric shape can be a rectangle, block arrow, equation symbol, flowchart item, star, banner, callout, or any other basic shape in Excel."
+Excel.GroupShapeCollection,Represents the shape collection inside a shape group.
+Excel.HeaderFooter,Represents a single header or footer in a worksheet
+Excel.HeaderFooterGroup,"Represents a group of headers or footers, typically categorized by their position (left, center, or right) on the page."
+Excel.IconSetConditionalFormat,Represents an icon set criteria for conditional formatting.
+Excel.Image,"Represents an image in the worksheet. To get the corresponding Shape object, use Image.shape."
+Excel.IterativeCalculation,Represents the iterative calculation settings.
+Excel.Line,"Represents a line inside a worksheet. To get the corresponding Shape object, use Line.shape."
+Excel.LinkedDataType,Represents a linked data type. A linked data type is a data type connected to an online data source.
+Excel.LinkedDataTypeCollection,Represents a collection of linked data types.
+Excel.LinkedWorkbook,"Contains information about a linked workbook. If a workbook has links pointing to data in another workbook, the second workbook is linked to the first workbook. In this scenario, the second workbook is called the ""linked workbook""."
+Excel.LinkedWorkbookCollection,Represents a collection of linked workbook objects.
+Excel.LocalImage,Provides information about the local image.
+Excel.NamedItem,"Represents a defined name for a range of cells or value. Names can be primitive named objects (as seen in the type below), range object, or a reference to a range. This object can be used to obtain range object associated with names."
+Excel.NamedItemArrayValues,Represents an object containing values and types of a named item.
+Excel.NamedItemCollection,"A collection of all the NamedItem objects that are part of the workbook or worksheet, depending on how it was reached."
+Excel.NamedSheetView,"Represents a named sheet view of a worksheet. A sheet view stores the sort and filter rules for a particular worksheet. Every sheet view (even a temporary sheet view) has a unique, worksheet-scoped name that is used to access the view."
+Excel.NamedSheetViewCollection,Represents the collection of sheet views in the worksheet.
+Excel.NumberFormatInfo,Defines the culturally appropriate format of displaying numbers. This is based on current system culture settings.
+Excel.PageBreak,Represents a single page break in a worksheet.
+Excel.PageBreakCollection,Represents a collection of page breaks in a worksheet.
+Excel.PageLayout,"Represents layout and print settings that are not dependent on any printer-specific implementation. These settings include margins, orientation, page numbering, title rows, and print area."
+Excel.PivotField,Represents the Excel PivotField.
+Excel.PivotFieldCollection,Represents a collection of all the PivotFields that are part of a PivotTable's hierarchy.
+Excel.PivotHierarchy,Represents the Excel PivotHierarchy.
+Excel.PivotHierarchyCollection,Represents a collection of all the PivotHierarchies that are part of the PivotTable.
+Excel.PivotItem,Represents the Excel PivotItem.
+Excel.PivotItemCollection,Represents a collection of all the PivotItems related to their parent PivotField.
+Excel.PivotLayout,Represents the visual layout of the PivotTable.
+Excel.PivotTable,"Represents an Excel PivotTable. To learn more about the PivotTable object model, read Work with PivotTables using the Excel JavaScript API."
+Excel.PivotTableCollection,Represents a collection of all the PivotTables that are part of the workbook or worksheet.
+Excel.PivotTableScopedCollection,Represents a scoped collection of PivotTables. The PivotTables are sorted based on the location of the PivotTable's top-left corner. They are ordered top-to-bottom and then left-to-right.
+Excel.PivotTableStyle,"Represents a PivotTable style, which defines style elements by PivotTable region."
+Excel.PivotTableStyleCollection,Represents a collection of PivotTable styles.
+Excel.PresetCriteriaConditionalFormat,"Represents the preset criteria conditional format such as above average, below average, unique values, contains blank, nonblank, error, and noerror."
+Excel.Query,Represents a Power Query query.
+Excel.QueryCollection,Represents the collection of queries in the workbook.
+Excel.Range,"Range represents a set of one or more contiguous cells such as a cell, a row, a column, or a block of cells. To learn more about how ranges are used throughout the API, start with Ranges in the Excel JavaScript API."
+Excel.RangeAreas,"RangeAreas represents a collection of one or more rectangular ranges in the same worksheet. To learn how to use discontiguous ranges, read Work with multiple ranges simultaneously in Excel add-ins."
+Excel.RangeAreasCollection,Contains the collection of cross-workbook level ranges.
+Excel.RangeBorder,Represents the border of an object.
+Excel.RangeBorderCollection,Represents the border objects that make up the range border.
+Excel.RangeCollection,Represents a collection of Excel.Range objects
+Excel.RangeFill,Represents the background of a range object.
+Excel.RangeFont,"This object represents the font attributes (font name, font size, color, etc.) for an object."
+Excel.RangeFormat,"A format object encapsulating the range's font, fill, borders, alignment, and other properties."
+Excel.RangeSort,Manages sorting operations on Range objects.
+Excel.RangeView,RangeView represents a set of visible cells of the parent range.
+Excel.RangeViewCollection,Represents a collection of RangeView objects.
+Excel.RemoveDuplicatesResult,Represents the results from Range.removeDuplicates.
+Excel.RequestContext,"The RequestContext object facilitates requests to the Excel application. Since the Office add-in and the Excel application run in two different processes, the request context is required to get access to the Excel object model from the add-in."
+Excel.RowColumnPivotHierarchy,Represents the Excel RowColumnPivotHierarchy.
+Excel.RowColumnPivotHierarchyCollection,Represents a collection of RowColumnPivotHierarchy items associated with the PivotTable.
+Excel.Runtime,Represents the Excel Runtime class.
+Excel.Setting,"Setting represents a key-value pair of a setting persisted to the document (per file, per add-in). These custom key-value pair can be used to store state or lifecycle information needed by the content or task-pane add-in. Note that settings are persisted in the document and hence it is not a place to store any sensitive or protected information such as user information and password."
+Excel.SettingCollection,Represents a collection of key-value pair setting objects that are part of the workbook. The scope is limited to per file and add-in (task-pane or content) combination.
+Excel.Shape,"Represents a generic shape object in the worksheet. A shape could be a geometric shape, a line, a group of shapes, etc. To learn more about the shape object model, read Work with shapes using the Excel JavaScript API."
+Excel.ShapeCollection,Represents a collection of all the shapes in the worksheet.
+Excel.ShapeFill,Represents the fill formatting of a shape object.
+Excel.ShapeFont,"Represents the font attributes, such as font name, font size, and color, for a shape's TextRange object."
+Excel.ShapeGroup,"Represents a shape group inside a worksheet. To get the corresponding Shape object, use ShapeGroup.shape."
+Excel.ShapeLineFormat,"Represents the line formatting for the shape object. For images and geometric shapes, line formatting represents the border of the shape."
+Excel.Slicer,Represents a Slicer object in the workbook.
+Excel.SlicerCollection,Represents a collection of all the slicer objects in the workbook or a worksheet.
+Excel.SlicerItem,Represents a slicer item in a slicer.
+Excel.SlicerItemCollection,Represents a collection of all the slicer item objects in the slicer.
+Excel.SlicerStyle,"Represents a slicer style, which defines style elements by region of the slicer."
+Excel.SlicerStyleCollection,Represents a collection of SlicerStyle objects.
+Excel.Style,An object encapsulating a style's format and other properties.
+Excel.StyleCollection,Represents a collection of all the styles.
+Excel.Table,"Represents an Excel table. To learn more about the table object model, read Work with tables using the Excel JavaScript API."
+Excel.TableCollection,"Represents a collection of all the tables that are part of the workbook or worksheet, depending on how it was reached."
+Excel.TableColumn,Represents a column in a table.
+Excel.TableColumnCollection,Represents a collection of all the columns that are part of the table.
+Excel.TableRow,Represents a row in a table.
+Excel.TableRowCollection,Represents a collection of all the rows that are part of the table.
+Excel.TableScopedCollection,"Represents a scoped collection of tables. For each table its top-left corner is considered its anchor location, and the tables are sorted top-to-bottom and then left-to-right."
+Excel.TableSort,Manages sorting operations on Table objects.
+Excel.TableStyle,"Represents a table style, which defines the style elements by region of the table."
+Excel.TableStyleCollection,Represents a collection of table styles.
+Excel.TextConditionalFormat,Represents a specific text conditional format.
+Excel.TextFrame,Represents the text frame of a shape object.
+Excel.TextRange,"Contains the text that is attached to a shape, in addition to properties and methods for manipulating the text."
+Excel.TimelineStyle,"Represents a TimelineStyle, which defines style elements by region in the timeline."
+Excel.TimelineStyleCollection,Represents a collection of timeline styles.
+Excel.TopBottomConditionalFormat,Represents a top/bottom conditional format.
+Excel.Workbook,"Workbook is the top level object which contains related workbook objects such as worksheets, tables, and ranges. To learn more about the workbook object model, read Work with workbooks using the Excel JavaScript API."
+Excel.WorkbookCreated,The WorkbookCreated object is the top level object created by Application.CreateWorkbook. A WorkbookCreated object is a special Workbook object.
+Excel.WorkbookProtection,Represents the protection of a workbook object.
+Excel.WorkbookRangeAreas,Represents a collection of one or more rectangular ranges in multiple worksheets.
+Excel.Worksheet,"An Excel worksheet is a grid of cells. It can contain data, tables, charts, etc. To learn more about the worksheet object model, read Work with worksheets using the Excel JavaScript API."
+Excel.WorksheetCollection,Represents a collection of worksheet objects that are part of the workbook.
+Excel.WorksheetCustomProperty,Represents a worksheet-level custom property.
+Excel.WorksheetCustomPropertyCollection,Contains the collection of worksheet-level custom property.
+Excel.WorksheetFreezePanes,Represents the freeze panes functionality in a worksheet.
+Excel.WorksheetProtection,Represents the protection of a worksheet object.

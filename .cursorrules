@@ -1,0 +1,303 @@
+<system_prompt>
+You are an intelligent senior software developer and AI code generator responsible for the project shown in the the XML tags.
+
+Your Requirements:
+- Maintain a clean, organized and modular codebase by seperating code out code logically into appropriate files, directories, sub-directories.
+- Do not let any file exceed ~250 lines of code.
+- Always use the latest libraries and tools as of 2025.
+- Take a modular approach by creating new files where needed, sectioning out code into logical files.
+- When encountering syntax errors or bugs, carefully examine the full file content before making changes
+- Leave begineer friendly comments logically sectioning out each file with headers describing what each section does.
+</system_prompt>
+You're creating an Excel task bin tool that uses the OpenAI API to do everything for users in Excel. 
+
+# src/taskpane/api/
+Okay, let's break down the structure and purpose of the files and directories you've highlighted within the `src/taskpane/api` directory. This area is crucial as it defines the bridge between the Excel JavaScript API and the OpenAI API, enabling the AI to interact with the user's spreadsheet.
+
+**Core Directories:**
+
+1.  `src/taskpane/api/excel/`:
+    *   **Purpose:** This directory encapsulates all functions that directly interact with the Excel JavaScript API (Office.js). It acts as a dedicated layer for performing actions within the Excel workbook, like reading/writing data, formatting, creating charts, etc.
+    *   **Structure:** It's organized by the type of Excel object or operation being performed (cells, ranges, charts, worksheets, data manipulation, formatting).
+    *   **Dependencies:** Primarily depends on the `Excel` global object provided by the Office.js library and potentially custom types defined in `src/taskpane/types`.
+    *   **Used By:** Functions within this directory are called by the `useOpenAITools` hook (`src/taskpane/hooks/useOpenAITools.ts`) to execute actions requested by the AI via function calls. They are also used by the OpenAI tool definitions in the `api/openai/tools/categories/` directory to describe the available actions to the AI.
+
+2.  `src/taskpane/api/openai/`:
+    *   **Purpose:** This directory handles all interactions with the OpenAI API. This includes initializing the client, defining the "tools" (functions) the AI can call, and managing operations like generating text embeddings.
+    *   **Structure:** Contains subdirectories for `tools` and files for client initialization (`client.ts`) and embedding operations (`embeddingOperations.ts`).
+    *   **Dependencies:** Uses the `openai` npm package and relies on the Excel operations defined in `src/taskpane/api/excel/` to implement the actual functionality behind the tools.
+    *   **Used By:** Primarily used by the `useAI` hook (`src/taskpane/hooks/useAI.ts`) to communicate with the OpenAI API and the `useOpenAITools` hook to get tool definitions.
+
+3.  `src/taskpane/api/openai/tools/`:
+    *   **Purpose:** This subdirectory specifically focuses on defining the functions (tools) that the OpenAI model can call. It structures how Excel operations are presented to the AI according to the OpenAI function calling schema.
+    *   **Structure:** Contains a `categories` subdirectory to group tools logically and a `toolDefinitions.ts` file to aggregate them.
+    *   **Dependencies:** OpenAI SDK types, and the specific Excel operation functions from `src/taskpane/api/excel/`.
+    *   **Used By:** `src/taskpane/api/openai/client.ts` (via re-export) and `src/taskpane/hooks/useOpenAITools.ts`.
+
+4.  `src/taskpane/api/openai/tools/categories/`:
+    *   **Purpose:** This directory logically groups the OpenAI tool definitions based on the type of Excel functionality they represent (e.g., cell operations, range operations, data analysis). This improves organization and maintainability.
+    *   **Structure:** Each file defines an array of tools related to its category (e.g., `cellTools.ts`, `dataTools.ts`).
+    *   **Dependencies:** OpenAI SDK types.
+    *   **Used By:** `src/taskpane/api/openai/tools/toolDefinitions.ts` imports functions from these files to build the complete list of tools.
+
+**Individual Files Analysis:**
+
+*   **`src/taskpane/api/excel/cellOperations.ts`**:
+    *   **Does:** Provides functions to interact with individual cells or the currently selected range. Includes writing data (`writeToCellOperation`, `writeToSelectedRange`), reading data (`readFromCellOperation`), formatting specific cells (`formatCellOperation`), getting info about the selection (`getSelectedRangeInfo`), and ensuring a valid cell is selected (`ensureValidSelection`).
+    *   **Depends On:** `Excel` API, `src/taskpane/types`.
+    *   **Used By:** `useOpenAITools` hook, `cellTools.ts`, `rangeTools.ts`.
+
+*   **`src/taskpane/api/excel/chartOperations.ts`**:
+    *   **Does:** Handles the creation of charts (`addChartOperation`) and pivot tables (`addPivotTableOperation`) within the active worksheet.
+    *   **Depends On:** `Excel` API.
+    *   **Used By:** `useOpenAITools` hook, `chartTools.ts`.
+
+*   **`src/taskpane/api/excel/dataOperations.ts`**:
+    *   **Does:** Contains functions for data manipulation and analysis. Includes basic data analysis (`analyzeData`), applying filters (`filterDataOperation`), sorting data (`sortDataOperation`), and enabling the native Excel filter UI (`enableAutoFilterUI`). Contains a helper `columnLetterToIndex`.
+    *   **Depends On:** `Excel` API, `src/taskpane/types`.
+    *   **Used By:** `useOpenAITools` hook, `dataTools.ts`, `rangeTools.ts` (for `analyzeData`).
+
+*   **`src/taskpane/api/excel/formatOperations.ts`**:
+    *   **Does:** Provides functions for applying and clearing cell formatting, specifically focusing on conditional formatting (`applyConditionalFormat`, `clearConditionalFormats`). Basic cell formatting is in `cellOperations.ts`.
+    *   **Depends On:** `Excel` API.
+    *   **Used By:** `useOpenAITools` hook, `formatTools.ts`.
+
+*   **`src/taskpane/api/excel/rangeOperations.ts`**:
+    *   **Does:** Focuses on operations involving cell ranges beyond single cells or the immediate selection. Includes reading data from a specified range (`getRangeData`), merging/unmerging cells (`mergeCellsOperation`, `unmergeCellsOperation`), auto-fitting columns/rows (`autofitColumnsOperation`, `autofitRowsOperation`), and getting the entire content of a sheet (`getCurrentSheetContent`).
+    *   **Depends On:** `Excel` API.
+    *   **Used By:** `useOpenAITools` hook, `rangeTools.ts`, `embeddingOperations.ts`.
+
+*   **`src/taskpane/api/excel/worksheetOperations.ts`**:
+    *   **Does:** Handles operations related to entire worksheets, such as getting all sheet names (`getWorksheetNames`), getting the active sheet name (`getActiveWorksheetName`), and creating or deleting sheets (`manageWorksheet`).
+    *   **Depends On:** `Excel` API.
+    *   **Used By:** `useOpenAITools` hook, `worksheetTools.ts`, `embeddingOperations.ts`.
+
+*   **`src/taskpane/api/excel/index.ts`**:
+    *   **Does:** Acts as a barrel file, re-exporting all functions from the other files within the `excel` directory. This allows other parts of the application to import any Excel operation from a single path (`../api/excel`).
+    *   **Depends On:** All other `.ts` files in the `src/taskpane/api/excel/` directory.
+    *   **Used By:** `src/taskpane/api/index.ts`, `useOpenAITools` hook, `embeddingOperations.ts`.
+
+*   **`src/taskpane/api/openai/tools/categories/cellTools.ts`**:
+    *   **Does:** Defines the OpenAI tool schemas for basic cell operations: `write_to_excel` and `read_from_excel`. These schemas describe the functions and their parameters to the AI model.
+    *   **Depends On:** `OpenAI` types.
+    *   **Used By:** `toolDefinitions.ts`.
+
+*   **`src/taskpane/api/openai/tools/categories/chartTools.ts`**:
+    *   **Does:** Defines the OpenAI tool schemas for chart and pivot table creation: `add_chart` and `add_pivot` (note: the function name `add_pivot` here maps to the `addPivotTableOperation` in `chartOperations.ts`).
+    *   **Depends On:** `OpenAI` types, `src/taskpane/types` (for enums).
+    *   **Used By:** `toolDefinitions.ts`.
+
+*   **`src/taskpane/api/openai/tools/categories/dataTools.ts`**:
+    *   **Does:** Defines the OpenAI tool schemas for data manipulation: `enable_filter_ui`, `filter_data`, and `sort_data`.
+    *   **Depends On:** `OpenAI` types, `src/taskpane/types` (for enums).
+    *   **Used By:** `toolDefinitions.ts`.
+
+*   **`src/taskpane/api/openai/tools/categories/formatTools.ts`**:
+    *   **Does:** Defines the OpenAI tool schemas for formatting operations: `format_cell`, `apply_conditional_format`, and `clear_conditional_formats`.
+    *   **Depends On:** `OpenAI` types.
+    *   **Used By:** `toolDefinitions.ts`.
+
+*   **`src/taskpane/api/openai/tools/categories/rangeTools.ts`**:
+    *   **Does:** Defines the OpenAI tool schemas for range operations: `write_to_selected_range`, `read_range`, `analyze_data`, `merge_cells`, `unmerge_cells`, `autofit_columns`, `autofit_rows`, and `analyze_selected_range`. It can optionally include details about the currently selected range in the descriptions.
+    *   **Depends On:** `OpenAI` types.
+    *   **Used By:** `toolDefinitions.ts`.
+
+*   **`src/taskpane/api/openai/tools/categories/worksheetTools.ts`**:
+    *   **Does:** Defines the OpenAI tool schemas for worksheet management: `manage_worksheet`, `get_worksheet_names`, and `get_active_worksheet_name`.
+    *   **Depends On:** `OpenAI` types.
+    *   **Used By:** `toolDefinitions.ts`.
+
+*   **`src/taskpane/api/openai/tools/categories/index.ts`**:
+    *   **Does:** Acts as a barrel file, re-exporting all tool-generating functions from the other files within the `categories` directory. Simplifies imports for `toolDefinitions.ts`.
+    *   **Depends On:** All other `.ts` files in the `src/taskpane/api/openai/tools/categories/` directory.
+    *   **Used By:** `toolDefinitions.ts`.
+
+*   **`src/taskpane/api/openai/tools/toolDefinitions.ts`**:
+    *   **Does:** Consolidates all tool definitions from the different category files into a single array. The main function `getToolDefinitions` is called to get the complete list of tools available to the AI. It can accept optional `selectedRange` info to customize tool descriptions.
+    *   **Depends On:** `OpenAI` types, all exports from `./categories/index.ts`.
+    *   **Used By:** `client.ts` (re-exported), `useOpenAITools` hook.
+
+*   **`src/taskpane/api/openai/tools/index.ts`**:
+    *   **Does:** Acts as a barrel file for the `tools` directory, re-exporting `getToolDefinitions` and all category exports.
+    *   **Depends On:** `toolDefinitions.ts`, `./categories/index.ts`.
+    *   **Used By:** `client.ts`, `useOpenAITools` hook (potentially).
+
+*   **`src/taskpane/api/openai/embeddingOperations.ts`**:
+    *   **Does:** Handles the creation of vector embeddings for worksheet content using OpenAI's `text-embedding-3-large` model. It includes functions to embed specific sheets (`embedWorksheet`), tagged sheets (`embedTaggedWorksheets`), all sheets (`embedAllWorksheets`), and extract sheet mentions from text (`extractWorksheetMentions`). It implements a simple in-memory cache (`embeddingCache`) to avoid redundant API calls. Also includes the `initializeOpenAI` function (though client initialization is mainly handled in `client.ts`).
+    *   **Depends On:** `OpenAI` SDK, functions from `src/taskpane/api/excel`.
+    *   **Used By:** `src/taskpane/api/index.ts`, `src/taskpane/api/openai/index.ts`, potentially hooks or components dealing with worksheet context/RAG.
+
+*   **`src/taskpane/api/openai/client.ts`**:
+    *   **Does:** Provides the primary function `getOpenAIClient` to initialize the OpenAI client instance. It uses a hardcoded API key as a fallback if one isn't provided. It also re-exports `getToolDefinitions` for convenience, although the definition logic resides in `toolDefinitions.ts`.
+    *   **Depends On:** `OpenAI` SDK, `toolDefinitions.ts`.
+    *   **Used By:** `useAI` hook, `embeddingOperations.ts` (implicitly, as they both need an OpenAI client).
+
+*   **`src/taskpane/api/openai/index.ts`**:
+    *   **Does:** Acts as a barrel file for the `openai` directory, re-exporting functions from `client.ts` and `embeddingOperations.ts`.
+    *   **Depends On:** `client.ts`, `embeddingOperations.ts`.
+    *   **Used By:** `src/taskpane/api/index.ts`.
+
+*   **`src/taskpane/api/index.ts`**:
+    *   **Does:** The top-level barrel file for the entire `api` directory. It re-exports everything from both the `excel` and `openai` submodules, providing a single entry point for accessing any API function (`import { functionName } from "../api"`). It specifically re-exports some embedding functions directly for potential ease of use.
+    *   **Depends On:** `./excel/index.ts`, `./openai/index.ts`, `./openai/embeddingOperations.ts`.
+    *   **Used By:** Various hooks (`useAI`, `useOpenAITools`) and potentially components throughout the taskpane application.
+
+In summary, the `api` directory is well-structured, separating Excel interactions (`excel`) from OpenAI interactions (`openai`). Within `openai`, tool definitions (`tools/categories`, `tools/toolDefinitions.ts`) are kept separate from client logic (`client.ts`) and embedding logic (`embeddingOperations.ts`). Index files (`index.ts`) are used effectively at each level to simplify imports and provide clear entry points to the modules.
+
+## Hooks
+
+Okay, let's analyze the custom React hooks within the `src/taskpane/hooks` directory. These hooks encapsulate specific pieces of stateful logic and side effects, making the components cleaner and promoting reusability.
+
+1.  **`src/taskpane/hooks/useWorksheets.ts`**:
+    *   **Purpose:** This hook is responsible for managing information about the worksheets within the current Excel workbook.
+    *   **Does:**
+        *   Maintains state for the list of all worksheet names (`worksheetNames`) and the name of the currently active worksheet (`activeWorksheet`).
+        *   Provides functions `fetchWorksheetNames` and `updateActiveWorksheet` to interact with the Excel API functions (`getWorksheetNames`, `getActiveWorksheetName` from `../api/excel`) to retrieve this data.
+        *   Initializes the state by fetching worksheet names and the active sheet when the hook is first used.
+        *   Crucially, it sets up an event listener using the Office.js API (`Office.context.document.addHandlerAsync(Office.EventType.ActiveViewChanged, ...)`). This listener automatically calls `updateActiveWorksheet` whenever the user switches to a different worksheet in Excel, keeping the `activeWorksheet` state synchronized in real-time.
+        *   It also includes cleanup logic (`removeHandlerAsync`) to remove the event listener when the component using the hook unmounts, preventing memory leaks.
+    *   **Dependencies:** `React`, `../api/excel` (specifically `getWorksheetNames`, `getActiveWorksheetName`), `Office.js` API.
+    *   **Used By:** Likely components that need to display worksheet information or provide context to other parts of the application (like the `useAI` hook), for example, the main `ChatInterface` component.
+
+2.  **`src/taskpane/hooks/useAI.ts`**:
+    *   **Purpose:** This hook encapsulates the logic for interacting with the OpenAI API, managing the client, and handling the request/response cycle, including tool calls.
+    *   **Does:**
+        *   Manages the OpenAI client instance using React state (`openaiClient`), initializing it lazily on the first call using `getOpenAIClient` from `../api/openai/client`.
+        *   Provides the core `sendMessageToAI` function. This function takes the chat history (`messages`) and contextual information (optional `selectedRange`, `activeWorksheet`, `taggedWorksheets`) as input.
+        *   Constructs a dynamic system prompt for the AI, injecting the current context (active sheet, selected range, tagged sheets) to give the AI awareness of the user's Excel environment.
+        *   Retrieves the available function/tool definitions using `getToolDefinitions` from `../api/openai/client`, potentially passing selected range info to customize descriptions.
+        *   Sends the messages and tool definitions to the OpenAI chat completion endpoint (`client.chat.completions.create`).
+        *   Checks the AI's response for `tool_calls`. If present, it uses the `executeToolCalls` function (imported from the `useOpenAITools` hook) to execute the requested Excel operations.
+        *   Sends a follow-up request to OpenAI, including the original messages, the AI's initial response (with tool calls), and the results from executing the tools.
+        *   Returns the final message content from the AI (either the initial response if no tools were called, or the response after processing tool results).
+        *   Includes error handling for client initialization and API calls.
+    *   **Dependencies:** `React`, `openai` SDK, `useOpenAITools` hook, `../api/openai/client` (`getOpenAIClient`, `getToolDefinitions`).
+    *   **Used By:** The `ChatInterface` component to handle sending user input to the AI and processing the response.
+
+3.  **`src/taskpane/hooks/useChatMessages.ts`**:
+    *   **Purpose:** This hook manages the state of the conversation history within the chat interface.
+    *   **Does:**
+        *   Maintains an array of `Message` objects in React state (`messages`). The `Message` interface defines the structure (text, user/AI flag, optional tagged worksheets, timestamp).
+        *   Provides simple functions to update the message list:
+            *   `addUserMessage`: Appends a new message from the user (setting `isUser` to true) and includes optional tagged worksheets.
+            *   `addAssistantMessage`: Appends a new message from the AI (setting `isUser` to false).
+            *   `addErrorMessage`: Appends an error message, formatted to appear as an assistant message.
+            *   `clearMessages`: Resets the message list to an empty array.
+    *   **Dependencies:** `React`.
+    *   **Used By:** The `ChatInterface` component to store, update, and display the sequence of messages in the conversation.
+
+4.  **`src/taskpane/hooks/useOpenAITools.ts`**:
+    *   **Purpose:** This hook is the bridge between the AI's function call requests and the actual Excel API operations defined in `src/taskpane/api/excel/`.
+    *   **Does:**
+        *   Provides the `executeTool` function, which takes a single `toolCall` object from the OpenAI response. It parses the function name and arguments. Using a `switch` statement, it maps the AI's requested function name (e.g., `"write_to_excel"`) to the corresponding TypeScript function that interacts with the Excel API (e.g., `writeToCellOperation` imported from `../api/excel/cellOperations`). It then calls the appropriate Excel operation function with the parsed arguments.
+        *   Provides the `executeToolCalls` function, which takes an array of `toolCall` objects. It iterates through this array, calls `executeTool` for each one, and collects the results. It formats each result into the structure required by the OpenAI API for a tool response message (`{ role: "tool", tool_call_id: ..., content: ... }`).
+        *   Includes `try...catch` blocks to handle errors during the execution of Excel operations and formats error messages appropriately to be sent back to the AI.
+    *   **Dependencies:** `React`, all specific Excel operation functions imported from `../api/excel/*`.
+    *   **Used By:** The `useAI` hook. When the `useAI` hook receives a response from OpenAI containing `tool_calls`, it passes these calls to the `executeToolCalls` function provided by this hook.
+
+5.  **`src/taskpane/hooks/index.ts`**:
+    *   **Purpose:** This is a barrel file. Its sole purpose is to simplify imports.
+    *   **Does:** It re-exports all the hooks defined in the other files within the `src/taskpane/hooks` directory (`useChatMessages`, `useOpenAITools`, `useAI`, `useWorksheets`).
+    *   **Dependencies:** The other hook files in the same directory.
+    *   **Used By:** Any component or other hook outside this directory that needs to use one or more of these hooks. Instead of importing each hook from its specific file (e.g., `import { useAI } from './useAI';`), they can import them all from the directory level (e.g., `import { useAI, useChatMessages } from '../hooks';`).
+
+In essence, these hooks effectively separate concerns: managing worksheet state (`useWorksheets`), handling chat history (`useChatMessages`), orchestrating AI communication (`useAI`), and executing AI-requested Excel actions (`useOpenAITools`). The barrel file (`index.ts`) just makes them easier to import elsewhere.
+
+
+<project_structure>
+.
+├── .hintrc
+├── README.md
+├── assets
+├── babel.config.json
+├── excel_docs
+│   ├── Classes.csv
+│   ├── Enums.csv
+│   ├── Functions.csv
+│   ├── Interfaces.csv
+│   ├── Type Aliases.csv
+│   ├── excel_api_operation_listing.csv
+│   ├── excel_api_operation_listing.json
+├── manifest.xml
+├── package.json
+├── src
+│   ├── assets
+│   ├── commands
+│   │   ├── commands.html
+│   │   ├── commands.ts
+│   ├── taskpane
+│   │   ├── App.tsx
+│   │   ├── api
+│   │   │   ├── embeddingOperations.ts
+│   │   │   ├── excel
+│   │   │   │   ├── cellOperations.ts
+│   │   │   │   ├── chartOperations.ts
+│   │   │   │   ├── dataOperations.ts
+│   │   │   │   ├── formatOperations.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── rangeOperations.ts
+│   │   │   │   ├── worksheetOperations.ts
+│   │   │   ├── index.ts
+│   │   │   ├── openai
+│   │   │   │   ├── client.ts
+│   │   │   │   ├── embeddingOperations.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── tools
+│   │   │   │   │   ├── categories
+│   │   │   │   │   │   ├── cellTools.ts
+│   │   │   │   │   │   ├── chartTools.ts
+│   │   │   │   │   │   ├── dataTools.ts
+│   │   │   │   │   │   ├── formatTools.ts
+│   │   │   │   │   │   ├── index.ts
+│   │   │   │   │   │   ├── rangeTools.ts
+│   │   │   │   │   │   ├── worksheetTools.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── toolDefinitions.ts
+│   │   ├── assets
+│   │   ├── components
+│   │   │   ├── App.tsx
+│   │   │   ├── ChatInterface.tsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── MessageItem.tsx
+│   │   │   ├── MessageList.tsx
+│   │   │   ├── SettingsPanel.tsx
+│   │   │   ├── SplashScreen.tsx
+│   │   │   ├── UserInput.tsx
+│   │   │   ├── chat
+│   │   │   │   ├── ChatInterface.tsx
+│   │   │   │   ├── MarkdownRenderer.tsx
+│   │   │   │   ├── MessageItem.tsx
+│   │   │   │   ├── MessageList.tsx
+│   │   │   │   ├── TypingIndicator.tsx
+│   │   │   │   ├── UserInput.tsx
+│   │   │   │   ├── styles
+│   │   │   │   │   ├── chat.css
+│   │   │   │   │   ├── userInput.css
+│   │   │   ├── shared
+│   │   │   │   ├── Header.tsx
+│   │   │   │   ├── SplashScreen.tsx
+│   │   │   │   ├── styles
+│   │   │   │   │   ├── header.css
+│   │   │   │   │   ├── splashScreen.css
+│   │   ├── embedding_operations.ts
+│   │   ├── excelOperations.ts
+│   │   ├── hooks
+│   │   │   ├── index.ts
+│   │   │   ├── useAI.ts
+│   │   │   ├── useChatMessages.ts
+│   │   │   ├── useOpenAITools.ts
+│   │   │   ├── useWorksheets.ts
+│   │   ├── index.tsx
+│   │   ├── scanExcelApi.js
+│   │   ├── styles
+│   │   │   ├── global.css
+│   │   ├── taskpane.css
+│   │   ├── taskpane.html
+│   │   ├── taskpane.ts
+│   │   ├── types
+│   │   │   ├── index.ts
+│   │   ├── utils
+│   │   │   ├── scanExcelApi.js
+├── tsconfig.json
+├── webpack.config.js
+</project_structure>

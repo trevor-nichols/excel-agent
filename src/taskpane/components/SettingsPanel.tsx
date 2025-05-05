@@ -78,7 +78,7 @@ const useStyles = makeStyles({
 });
 
 const DEFAULT_API_KEY =
-  "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";
+  "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";
 
 const SettingsPanel: React.FC<SettingsPanelProps> = ({ onClose, apiKey, onApiKeyChange }) => {
   const styles = useStyles();

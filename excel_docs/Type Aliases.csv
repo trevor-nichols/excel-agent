@@ -1,0 +1,9 @@
+Type Aliases,Type Aliase Description
+Excel.CardLayout,Represents the layout of a card in card view.
+Excel.CardLayoutSection,Represents the layout of a section of a card in card view.
+Excel.CellValue,Represents the value in a cell.
+Excel.CellValueAndPropertyMetadata,"Represents the value and metadata of a property. The metadata applies to the property (and not the value), but it is combined with the value in this type."
+Excel.CompactLayout,Represents the layout used when there is limited space to represent the entity.
+Excel.EntityPropertyType,Represents the value of a property.
+Excel.ErrorCellValue,Represents a cell value which contains an error.
+Excel.ReferencedValue,Represents the value in a cell.

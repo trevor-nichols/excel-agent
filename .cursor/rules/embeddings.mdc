@@ -1,0 +1,917 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Vector embeddings
+Learn how to turn text into numbers, unlocking use cases like search.
+New embedding models
+text-embedding-3-small and text-embedding-3-large, our newest and most performant embedding models, are now available. They feature lower costs, higher multilingual performance, and new parameters to control the overall size.
+What are embeddings?
+OpenAI’s text embeddings measure the relatedness of text strings. Embeddings are commonly used for:
+
+Search (where results are ranked by relevance to a query string)
+Clustering (where text strings are grouped by similarity)
+Recommendations (where items with related text strings are recommended)
+Anomaly detection (where outliers with little relatedness are identified)
+Diversity measurement (where similarity distributions are analyzed)
+Classification (where text strings are classified by their most similar label)
+An embedding is a vector (list) of floating point numbers. The distance between two vectors measures their relatedness. Small distances suggest high relatedness and large distances suggest low relatedness.
+
+Visit our pricing page to learn about embeddings pricing. Requests are billed based on the number of tokens in the input.
+
+How to get embeddings
+To get an embedding, send your text string to the embeddings API endpoint along with the embedding model name (e.g., text-embedding-3-small):
+
+Example: Getting embeddings
+import OpenAI from "openai";
+const openai = new OpenAI();
+
+const embedding = await openai.embeddings.create({
+  model: "text-embedding-3-small",
+  input: "Your text string goes here",
+  encoding_format: "float",
+});
+
+console.log(embedding);
+The response contains the embedding vector (list of floating point numbers) along with some additional metadata. You can extract the embedding vector, save it in a vector database, and use for many different use cases.
+
+{
+  "object": "list",
+  "data": [
+    {
+      "object": "embedding",
+      "index": 0,
+      "embedding": [
+        -0.006929283495992422,
+        -0.005336422007530928,
+        -4.547132266452536e-05,
+        -0.024047505110502243
+      ],
+    }
+  ],
+  "model": "text-embedding-3-small",
+  "usage": {
+    "prompt_tokens": 5,
+    "total_tokens": 5
+  }
+}
+By default, the length of the embedding vector is 1536 for text-embedding-3-small or 3072 for text-embedding-3-large. To reduce the embedding's dimensions without losing its concept-representing properties, pass in the dimensions parameter. Find more detail on embedding dimensions in the embedding use case section.
+
+Embedding models
+OpenAI offers two powerful third-generation embedding model (denoted by -3 in the model ID). Read the embedding v3 announcement blog post for more details.
+
+Usage is priced per input token. Below is an example of pricing pages of text per US dollar (assuming ~800 tokens per page):
+
+Model	~ Pages per dollar	Performance on MTEB eval	Max input
+text-embedding-3-small	62,500	62.3%	8191
+text-embedding-3-large	9,615	64.6%	8191
+text-embedding-ada-002	12,500	61.0%	8191
+Use cases
+Here we show some representative use cases, using the Amazon fine-food reviews dataset.
+
+Obtaining the embeddings
+The dataset contains a total of 568,454 food reviews left by Amazon users up to October 2012. We use a subset of the 1000 most recent reviews for illustration purposes. The reviews are in English and tend to be positive or negative. Each review has a ProductId, UserId, Score, review title (Summary) and review body (Text). For example:
+
+Product Id	User Id	Score	Summary	Text
+B001E4KFG0	A3SGXH7AUHU8GW	5	Good Quality Dog Food	I have bought several of the Vitality canned...
+B00813GRG4	A1D87F6ZCVE5NK	1	Not as Advertised	Product arrived labeled as Jumbo Salted Peanut...
+Below, we combine the review summary and review text into a single combined text. The model encodes this combined text and output a single vector embedding.
+
+from openai import OpenAI
+client = OpenAI()
+
+def get_embedding(text, model="text-embedding-3-small"):
+    text = text.replace("\n", " ")
+    return client.embeddings.create(input = [text], model=model).data[0].embedding
+
+df['ada_embedding'] = df.combined.apply(lambda x: get_embedding(x, model='text-embedding-3-small'))
+df.to_csv('output/embedded_1k_reviews.csv', index=False)
+To load the data from a saved file, you can run the following:
+
+import pandas as pd
+
+df = pd.read_csv('output/embedded_1k_reviews.csv')
+df['ada_embedding'] = df.ada_embedding.apply(eval).apply(np.array)
+Reducing embedding dimensions
+Using larger embeddings, for example storing them in a vector store for retrieval, generally costs more and consumes more compute, memory and storage than using smaller embeddings.
+
+Both of our new embedding models were trained with a technique that allows developers to trade-off performance and cost of using embeddings. Specifically, developers can shorten embeddings (i.e. remove some numbers from the end of the sequence) without the embedding losing its concept-representing properties by passing in the dimensions API parameter. For example, on the MTEB benchmark, a text-embedding-3-large embedding can be shortened to a size of 256 while still outperforming an unshortened text-embedding-ada-002 embedding with a size of 1536. You can read more about how changing the dimensions impacts performance in our embeddings v3 launch blog post.
+
+In general, using the dimensions parameter when creating the embedding is the suggested approach. In certain cases, you may need to change the embedding dimension after you generate it. When you change the dimension manually, you need to be sure to normalize the dimensions of the embedding as is shown below.
+
+from openai import OpenAI
+import numpy as np
+
+client = OpenAI()
+
+def normalize_l2(x):
+    x = np.array(x)
+    if x.ndim == 1:
+        norm = np.linalg.norm(x)
+        if norm == 0:
+            return x
+        return x / norm
+    else:
+        norm = np.linalg.norm(x, 2, axis=1, keepdims=True)
+        return np.where(norm == 0, x, x / norm)
+
+
+response = client.embeddings.create(
+    model="text-embedding-3-small", input="Testing 123", encoding_format="float"
+)
+
+cut_dim = response.data[0].embedding[:256]
+norm_dim = normalize_l2(cut_dim)
+
+print(norm_dim)
+Dynamically changing the dimensions enables very flexible usage. For example, when using a vector data store that only supports embeddings up to 1024 dimensions long, developers can now still use our best embedding model text-embedding-3-large and specify a value of 1024 for the dimensions API parameter, which will shorten the embedding down from 3072 dimensions, trading off some accuracy in exchange for the smaller vector size.
+
+Question answering using embeddings-based search
+
+There are many common cases where the model is not trained on data which contains key facts and information you want to make accessible when generating responses to a user query. One way of solving this, as shown below, is to put additional information into the context window of the model. This is effective in many use cases but leads to higher token costs. In this notebook, we explore the tradeoff between this approach and embeddings bases search.
+
+query = f"""Use the below article on the 2022 Winter Olympics to answer the subsequent question. If the answer cannot be found, write "I don't know."
+
+Article:
+\"\"\"
+{wikipedia_article_on_curling}
+\"\"\"
+
+Question: Which athletes won the gold medal in curling at the 2022 Winter Olympics?"""
+
+response = client.chat.completions.create(
+    messages=[
+        {'role': 'system', 'content': 'You answer questions about the 2022 Winter Olympics.'},
+        {'role': 'user', 'content': query},
+    ],
+    model=GPT_MODEL,
+    temperature=0,
+)
+
+print(response.choices[0].message.content)
+Text search using embeddings
+
+To retrieve the most relevant documents we use the cosine similarity between the embedding vectors of the query and each document, and return the highest scored documents.
+
+from openai.embeddings_utils import get_embedding, cosine_similarity
+
+def search_reviews(df, product_description, n=3, pprint=True):
+    embedding = get_embedding(product_description, model='text-embedding-3-small')
+    df['similarities'] = df.ada_embedding.apply(lambda x: cosine_similarity(x, embedding))
+    res = df.sort_values('similarities', ascending=False).head(n)
+    return res
+
+res = search_reviews(df, 'delicious beans', n=3)
+Code search using embeddings
+
+Code search works similarly to embedding-based text search. We provide a method to extract Python functions from all the Python files in a given repository. Each function is then indexed by the text-embedding-3-small model.
+
+To perform a code search, we embed the query in natural language using the same model. Then we calculate cosine similarity between the resulting query embedding and each of the function embeddings. The highest cosine similarity results are most relevant.
+
+from openai.embeddings_utils import get_embedding, cosine_similarity
+
+df['code_embedding'] = df['code'].apply(lambda x: get_embedding(x, model='text-embedding-3-small'))
+
+def search_functions(df, code_query, n=3, pprint=True, n_lines=7):
+    embedding = get_embedding(code_query, model='text-embedding-3-small')
+    df['similarities'] = df.code_embedding.apply(lambda x: cosine_similarity(x, embedding))
+
+    res = df.sort_values('similarities', ascending=False).head(n)
+    return res
+
+res = search_functions(df, 'Completions API tests', n=3)
+Recommendations using embeddings
+
+Because shorter distances between embedding vectors represent greater similarity, embeddings can be useful for recommendation.
+
+Below, we illustrate a basic recommender. It takes in a list of strings and one 'source' string, computes their embeddings, and then returns a ranking of the strings, ranked from most similar to least similar. As a concrete example, the linked notebook below applies a version of this function to the AG news dataset (sampled down to 2,000 news article descriptions) to return the top 5 most similar articles to any given source article.
+
+def recommendations_from_strings(
+    strings: List[str],
+    index_of_source_string: int,
+    model="text-embedding-3-small",
+) -> List[int]:
+    """Return nearest neighbors of a given string."""
+
+    # get embeddings for all strings
+    embeddings = [embedding_from_string(string, model=model) for string in strings]
+
+    # get the embedding of the source string
+    query_embedding = embeddings[index_of_source_string]
+
+    # get distances between the source embedding and other embeddings (function from embeddings_utils.py)
+    distances = distances_from_embeddings(query_embedding, embeddings, distance_metric="cosine")
+
+    # get indices of nearest neighbors (function from embeddings_utils.py)
+    indices_of_nearest_neighbors = indices_of_nearest_neighbors_from_distances(distances)
+    return indices_of_nearest_neighbors
+Data visualization in 2D
+
+The size of the embeddings varies with the complexity of the underlying model. In order to visualize this high dimensional data we use the t-SNE algorithm to transform the data into two dimensions.
+
+We color the individual reviews based on the star rating which the reviewer has given:
+
+1-star: red
+2-star: dark orange
+3-star: gold
+4-star: turquoise
+5-star: dark green
+Amazon ratings visualized in language using t-SNE
+The visualization seems to have produced roughly 3 clusters, one of which has mostly negative reviews.
+
+import pandas as pd
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
+import matplotlib
+
+df = pd.read_csv('output/embedded_1k_reviews.csv')
+matrix = df.ada_embedding.apply(eval).to_list()
+
+# Create a t-SNE model and transform the data
+tsne = TSNE(n_components=2, perplexity=15, random_state=42, init='random', learning_rate=200)
+vis_dims = tsne.fit_transform(matrix)
+
+colors = ["red", "darkorange", "gold", "turquiose", "darkgreen"]
+x = [x for x,y in vis_dims]
+y = [y for x,y in vis_dims]
+color_indices = df.Score.values - 1
+
+colormap = matplotlib.colors.ListedColormap(colors)
+plt.scatter(x, y, c=color_indices, cmap=colormap, alpha=0.3)
+plt.title("Amazon ratings visualized in language using t-SNE")
+Embedding as a text feature encoder for ML algorithms
+
+An embedding can be used as a general free-text feature encoder within a machine learning model. Incorporating embeddings will improve the performance of any machine learning model, if some of the relevant inputs are free text. An embedding can also be used as a categorical feature encoder within a ML model. This adds most value if the names of categorical variables are meaningful and numerous, such as job titles. Similarity embeddings generally perform better than search embeddings for this task.
+
+We observed that generally the embedding representation is very rich and information dense. For example, reducing the dimensionality of the inputs using SVD or PCA, even by 10%, generally results in worse downstream performance on specific tasks.
+
+This code splits the data into a training set and a testing set, which will be used by the following two use cases, namely regression and classification.
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    list(df.ada_embedding.values),
+    df.Score,
+    test_size = 0.2,
+    random_state=42
+)
+Regression using the embedding features
+Embeddings present an elegant way of predicting a numerical value. In this example we predict the reviewer’s star rating, based on the text of their review. Because the semantic information contained within embeddings is high, the prediction is decent even with very few reviews.
+
+We assume the score is a continuous variable between 1 and 5, and allow the algorithm to predict any floating point value. The ML algorithm minimizes the distance of the predicted value to the true score, and achieves a mean absolute error of 0.39, which means that on average the prediction is off by less than half a star.
+
+from sklearn.ensemble import RandomForestRegressor
+
+rfr = RandomForestRegressor(n_estimators=100)
+rfr.fit(X_train, y_train)
+preds = rfr.predict(X_test)
+Classification using the embedding features
+
+This time, instead of having the algorithm predict a value anywhere between 1 and 5, we will attempt to classify the exact number of stars for a review into 5 buckets, ranging from 1 to 5 stars.
+
+After the training, the model learns to predict 1 and 5-star reviews much better than the more nuanced reviews (2-4 stars), likely due to more extreme sentiment expression.
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, accuracy_score
+
+clf = RandomForestClassifier(n_estimators=100)
+clf.fit(X_train, y_train)
+preds = clf.predict(X_test)
+Zero-shot classification
+
+We can use embeddings for zero shot classification without any labeled training data. For each class, we embed the class name or a short description of the class. To classify some new text in a zero-shot manner, we compare its embedding to all class embeddings and predict the class with the highest similarity.
+
+from openai.embeddings_utils import cosine_similarity, get_embedding
+
+df= df[df.Score!=3]
+df['sentiment'] = df.Score.replace({1:'negative', 2:'negative', 4:'positive', 5:'positive'})
+
+labels = ['negative', 'positive']
+label_embeddings = [get_embedding(label, model=model) for label in labels]
+
+def label_score(review_embedding, label_embeddings):
+    return cosine_similarity(review_embedding, label_embeddings[1]) - cosine_similarity(review_embedding, label_embeddings[0])
+
+prediction = 'positive' if label_score('Sample Review', label_embeddings) > 0 else 'negative'
+Obtaining user and product embeddings for cold-start recommendation
+
+We can obtain a user embedding by averaging over all of their reviews. Similarly, we can obtain a product embedding by averaging over all the reviews about that product. In order to showcase the usefulness of this approach we use a subset of 50k reviews to cover more reviews per user and per product.
+
+We evaluate the usefulness of these embeddings on a separate test set, where we plot similarity of the user and product embedding as a function of the rating. Interestingly, based on this approach, even before the user receives the product we can predict better than random whether they would like the product.
+
+Boxplot grouped by Score
+user_embeddings = df.groupby('UserId').ada_embedding.apply(np.mean)
+prod_embeddings = df.groupby('ProductId').ada_embedding.apply(np.mean)
+Clustering
+
+Clustering is one way of making sense of a large volume of textual data. Embeddings are useful for this task, as they provide semantically meaningful vector representations of each text. Thus, in an unsupervised way, clustering will uncover hidden groupings in our dataset.
+
+In this example, we discover four distinct clusters: one focusing on dog food, one on negative reviews, and two on positive reviews.
+
+Clusters identified visualized in language 2d using t-SNE
+import numpy as np
+from sklearn.cluster import KMeans
+
+matrix = np.vstack(df.ada_embedding.values)
+n_clusters = 4
+
+kmeans = KMeans(n_clusters = n_clusters, init='k-means++', random_state=42)
+kmeans.fit(matrix)
+df['Cluster'] = kmeans.labels_
+
+Retrieval
+=========
+
+Search your data using semantic similarity.
+
+The **Retrieval API** allows you to perform [**semantic search**](mdc:#semantic-search) over your data, which is a technique that surfaces semantically similar results — even when they match few or no keywords. Retrieval is useful on its own, but is especially powerful when combined with our models to synthesize responses.
+
+![Retrieval depiction](mdc:https:/cdn.openai.com/API/docs/images/retrieval-depiction.png)
+
+The Retrieval API is powered by [**vector stores**](mdc:#vector-stores), which serve as indices for your data. This guide will cover how to perform semantic search, and go into the details of vector stores.
+
+Quickstart
+----------
+
+*   **Create vector store** and upload files.
+    
+
+Create vector store with files
+
+```javascript
+import OpenAI from "openai";
+const client = new OpenAI();
+
+const vector_store = await client.vectorStores.create({   // Create vector store
+    name: "Support FAQ",
+});
+
+await client.vector_stores.files.upload_and_poll({         // Upload file
+    vector_store_id: vector_store.id,
+    file: fs.createReadStream("customer_policies.txt"),
+});
+```
+
+*   **Send search query** to get relevant results.
+    
+
+Search query
+
+```javascript
+const userQuery = "What is the return policy?";
+
+const results = await client.vectorStores.search({
+    vector_store_id: vector_store.id,
+    query: userQuery,
+});
+```
+
+To learn how to use the results with our models, check out the [synthesizing responses](mdc:#synthesizing-responses) section.
+
+Semantic search
+---------------
+
+**Semantic search** is a technique that leverages [vector embeddings](mdc:docs/guides/embeddings) to surface semantically relevant results. Importantly, this includes results with few or no shared keywords, which classical search techniques might miss.
+
+For example, let's look at potential results for `"When did we go to the moon?"`:
+
+|Text|Keyword Similarity|Semantic Similarity|
+|---|---|---|
+|The first lunar landing occured in July of 1969.|0%|65%|
+|The first man on the moon was Neil Armstrong.|27%|43%|
+|When I ate the moon cake, it was delicious.|40%|28%|
+
+_([Jaccard](mdc:https:/en.wikipedia.org/wiki/Jaccard_index) used for keyword, [cosine](mdc:https:/en.wikipedia.org/wiki/Cosine_similarity) with `text-embedding-3-small` used for semantic.)_
+
+Notice how the most relevant result contains none of the words in the search query. This flexibility makes semantic search a very powerful technique for querying knowledge bases of any size.
+
+Semantic search is powered by [vector stores](mdc:#vector-stores), which we cover in detail later in the guide. This section will focus on the mechanics of semantic search.
+
+### Perfoming semantic search
+
+You can query a vector store using the `search` function and specifying a `query` in natural language. This will return a list of results, each with the relevant chunks, similarity scores, and file of origin.
+
+Search query
+
+```javascript
+const results = await client.vectorStores.search({
+    vector_store_id: vector_store.id,
+    query: "How many woodchucks are allowed per passenger?",
+});
+```
+
+Results
+
+```json
+{
+  "object": "vector_store.search_results.page",
+  "search_query": "How many woodchucks are allowed per passenger?",
+  "data": [
+    {
+      "file_id": "file-12345",
+      "filename": "woodchuck_policy.txt",
+      "score": 0.85,
+      "attributes": {
+        "region": "North America",
+        "author": "Wildlife Department"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "According to the latest regulations, each passenger is allowed to carry up to two woodchucks."
+        },
+        {
+          "type": "text",
+          "text": "Ensure that the woodchucks are properly contained during transport."
+        }
+      ]
+    },
+    {
+      "file_id": "file-67890",
+      "filename": "transport_guidelines.txt",
+      "score": 0.75,
+      "attributes": {
+        "region": "North America",
+        "author": "Transport Authority"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "Passengers must adhere to the guidelines set forth by the Transport Authority regarding the transport of woodchucks."
+        }
+      ]
+    }
+  ],
+  "has_more": false,
+  "next_page": null
+}
+```
+
+A response will contain 10 results maximum by default, but you can set up to 50 using the `max_num_results` param.
+
+### Query rewriting
+
+Certain query styles yield better results, so we've provided a setting to automatically rewrite your queries for optimal performance. Enable this feature by setting `rewrite_query=true` when performing a `search`.
+
+The rewritten query will be available in the result's `search_query` field.
+
+|Original|Rewritten|
+|---|---|
+|I'd like to know the height of the main office building.|primary office building height|
+|What are the safety regulations for transporting hazardous materials?|safety regulations for hazardous materials|
+|How do I file a complaint about a service issue?|service complaint filing process|
+
+### Attribute filtering
+
+Attribute filtering helps narrow down results by applying criteria, such as restricting searches to a specific date range. You can define and combine criteria in `attribute_filter` to target files based on their attributes before performing semantic search.
+
+Use **comparison filters** to compare a specific `key` in a file's `attributes` with a given `value`, and **compound filters** to combine multiple filters using `and` and `or`.
+
+Comparison filter
+
+```json
+{
+  "type": "eq" | "ne" | "gt" | "gte" | "lt" | "lte",  // comparison operators
+  "property": "attributes_property",                  // attributes property
+  "value": "target_value"                             // value to compare against
+}
+```
+
+Compound filter
+
+```json
+{
+  "type": "and" | "or",                                // logical operators
+  "filters": [...]                                   
+}
+```
+
+Below are some example filters.
+
+Region
+
+Filter for a region
+
+```json
+{
+  "type": "eq",
+  "property": "region",
+  "value": "us"
+}
+```
+
+Date range
+
+Filter for a date range
+
+```json
+{
+  "type": "and",
+  "filters": [
+    {
+      "type": "gte",
+      "property": "date",
+      "value": 1704067200  // unix timestamp for 2024-01-01
+    },
+    {
+      "type": "lte",
+      "property": "date",
+      "value": 1710892800  // unix timestamp for 2024-03-20
+    }
+  ]
+}
+```
+
+Filenames
+
+Filter to match any of a set of filenames
+
+```json
+{
+  "type": "or",
+  "filters": [
+    {
+      "type": "eq",
+      "property": "filename",
+      "value": "example.txt"
+    },
+    {
+      "type": "eq",
+      "property": "filename",
+      "value": "example2.txt"
+    }
+  ]
+}
+```
+
+Complex
+
+Filter for top secret projects with certain names in english
+
+```json
+{
+  "type": "or",
+  "filters": [
+    {
+      "type": "and",
+      "filters": [
+        {
+          "type": "or",
+          "filters": [
+            {
+              "type": "eq",
+              "property": "project_code",
+              "value": "X123"
+            },
+            {
+              "type": "eq",
+              "property": "project_code",
+              "value": "X999"
+            }
+          ]
+        },
+        {
+          "type": "eq",
+          "property": "confidentiality",
+          "value": "top_secret"
+        }
+      ]
+    },
+    {
+      "type": "eq",
+      "property": "language",
+      "value": "en"
+    }
+  ]
+}
+```
+
+### Ranking
+
+If you find that your file search results are not sufficiently relevant, you can adjust the `ranking_options` to improve the quality of responses. This includes specifying a `ranker`, such as `auto` or `default-2024-08-21`, and setting a `score_threshold` between 0.0 and 1.0. A higher `score_threshold` will limit the results to more relevant chunks, though it may exclude some potentially useful ones.
+
+Vector stores
+-------------
+
+Vector stores are the containers that power semantic search for the Retrieval API and the Assistants API file search tool. When you add a file to a vector store it will be automatically chunked, embedded, and indexed.
+
+Vector stores contain `vector_store_file` objects, which are backed by a `file` object.
+
+|Object type|Description|
+|---|---|
+|file|Represents content uploaded through the Files API. Often used with vector stores, but also for fine-tuning and other use cases.|
+|vector_store|Container for searchable files.|
+|vector_store.file|Wrapper type specifically representing a file that has been chunked and embedded, and has been associated with a vector_store.Contains attributes map used for filtering.|
+
+### Vector store operations
+
+Create
+
+Create vector store
+
+```javascript
+await client.vector_stores.create({
+    name: "Support FAQ",
+    file_ids: ["file_123"]
+});
+```
+
+Retrieve
+
+Retrieve vector store
+
+```javascript
+await client.vector_stores.retrieve({
+    vector_store_id: "vs_123"
+});
+```
+
+Update
+
+Update vector store
+
+```javascript
+await client.vector_stores.update({
+    vector_store_id: "vs_123",
+    name: "Support FAQ Updated"
+});
+```
+
+Delete
+
+Delete vector store
+
+```javascript
+await client.vector_stores.delete({
+    vector_store_id: "vs_123"
+});
+```
+
+List
+
+List vector stores
+
+```javascript
+await client.vector_stores.list();
+```
+
+### Vector store file operations
+
+Some operations, like `create` for `vector_store.file`, are asynchronous and may take time to complete — use our helper functions, like `create_and_poll` to block until it is. Otherwise, you may check the status.
+
+Create
+
+Create vector store file
+
+```javascript
+await client.vector_stores.files.create_and_poll({
+    vector_store_id: "vs_123",
+    file_id: "file_123"
+});
+```
+
+Upload
+
+Upload vector store file
+
+```javascript
+await client.vector_stores.files.upload_and_poll({
+    vector_store_id: "vs_123",
+    file: fs.createReadStream("customer_policies.txt"),
+});
+```
+
+Retrieve
+
+Retrieve vector store file
+
+```javascript
+await client.vector_stores.files.retrieve({
+    vector_store_id: "vs_123",
+    file_id: "file_123"
+});
+```
+
+Update
+
+Update vector store file
+
+```javascript
+await client.vector_stores.files.update({
+    vector_store_id: "vs_123",
+    file_id: "file_123",
+    attributes: { key: "value" }
+});
+```
+
+Delete
+
+Delete vector store file
+
+```javascript
+await client.vector_stores.files.delete({
+    vector_store_id: "vs_123",
+    file_id: "file_123"
+});
+```
+
+List
+
+List vector store files
+
+```javascript
+await client.vector_stores.files.list({
+    vector_store_id: "vs_123"
+});
+```
+
+### Batch operations
+
+Create
+
+Batch create operation
+
+```javascript
+await client.vector_stores.file_batches.create_and_poll({
+    vector_store_id: "vs_123",
+    file_ids: ["file_123", "file_456"]
+});
+```
+
+Retrieve
+
+Batch retrieve operation
+
+```javascript
+await client.vector_stores.file_batches.retrieve({
+    vector_store_id: "vs_123",
+    batch_id: "vsfb_123"
+});
+```
+
+Cancel
+
+Batch cancel operation
+
+```javascript
+await client.vector_stores.file_batches.cancel({
+    vector_store_id: "vs_123",
+    batch_id: "vsfb_123"
+});
+```
+
+List
+
+Batch list operation
+
+```javascript
+await client.vector_stores.file_batches.list({
+    vector_store_id: "vs_123"
+});
+```
+
+### Attributes
+
+Each `vector_store.file` can have associated `attributes`, a dictionary of values that can be referenced when performing [semantic search](mdc:#semantic-search) with [attribute filtering](mdc:#attribute-filtering). The dictionary can have at most 16 keys, with a limit of 256 characters each.
+
+Create vector store file with attributes
+
+```javascript
+await client.vector_stores.files.create({
+    vector_store_id: "vs_123",
+    file_id: "file_123",
+    attributes: {
+        region: "US",
+        category: "Marketing",
+        date: 1672531200, // Jan 1, 2023
+    },
+});
+```
+
+### Expiration policies
+
+You can set an expiration policy on `vector_store` objects with `expires_after`. Once a vector store expires, all associated `vector_store.file` objects will be deleted and you'll no longer be charged for them.
+
+Set expiration policy for vector store
+
+```javascript
+await client.vector_stores.update({
+    vector_store_id: "vs_123",
+    expires_after: {
+        anchor: "last_active_at",
+        days: 7,
+    },
+});
+```
+
+### Limits
+
+The maximum file size is 512 MB. Each file should contain no more than 5,000,000 tokens per file (computed automatically when you attach a file).
+
+### Chunking
+
+By default, `max_chunk_size_tokens` is set to `800` and `chunk_overlap_tokens` is set to `400`, meaning every file is indexed by being split up into 800-token chunks, with 400-token overlap between consecutive chunks.
+
+You can adjust this by setting [`chunking_strategy`](mdc:docs/api-reference/vector-stores-files/createFile#vector-stores-files-createfile-chunking_strategy) when adding files to the vector store. There are certain limitations to `chunking_strategy`:
+
+*   `max_chunk_size_tokens` must be between 100 and 4096 inclusive.
+*   `chunk_overlap_tokens` must be non-negative and should not exceed `max_chunk_size_tokens / 2`.
+
+Supported file types
+
+_For `text/` MIME types, the encoding must be one of `utf-8`, `utf-16`, or `ascii`._
+
+|File format|MIME type|
+|---|---|
+|.c|text/x-c|
+|.cpp|text/x-c++|
+|.cs|text/x-csharp|
+|.css|text/css|
+|.doc|application/msword|
+|.docx|application/vnd.openxmlformats-officedocument.wordprocessingml.document|
+|.go|text/x-golang|
+|.html|text/html|
+|.java|text/x-java|
+|.js|text/javascript|
+|.json|application/json|
+|.md|text/markdown|
+|.pdf|application/pdf|
+|.php|text/x-php|
+|.pptx|application/vnd.openxmlformats-officedocument.presentationml.presentation|
+|.py|text/x-python|
+|.py|text/x-script.python|
+|.rb|text/x-ruby|
+|.sh|application/x-sh|
+|.tex|text/x-tex|
+|.ts|application/typescript|
+|.txt|text/plain|
+
+Synthesizing responses
+----------------------
+
+After performing a query you may want to synthesize a response based on the results. You can leverage our models to do so, by supplying the results and original query, to get back a grounded response.
+
+Perform search query to get results
+
+```javascript
+const { OpenAI } = require('openai');
+const client = new OpenAI();
+
+const userQuery = "What is the return policy?";
+
+const results = await client.vectorStores.search({
+    vector_store_id: vector_store.id,
+    query: userQuery,
+});
+```
+
+Synthesize a response based on results
+
+
+```javascript
+const formattedResults = formatResults(results.data);
+// Join the text content of all results
+const textSources = results.data.map(result => result.content.map(c => c.text).join('\n')).join('\n');
+
+const completion = await client.chat.completions.create({
+    model: "gpt-4.1",
+    messages: [
+        {
+            role: "developer",
+            content: "Produce a concise answer to the query based on the provided sources."
+        },
+        {
+            role: "user",
+            content: `Sources: ${formattedResults}\n\nQuery: '${userQuery}'`
+        }
+    ],
+});
+
+console.log(completion.choices[0].message.content);
+```
+
+```json
+"Our return policy allows returns within 30 days of purchase."
+```
+
+This uses a sample `format_results` function, which could be implemented like so:
+
+Sample result formatting function
+
+
+```javascript
+function formatResults(results) {
+    let formattedResults = '';
+    for (const result of results.data) {
+        let formattedResult = `<result file_id='${result.file_id}' file_name='${result.file_name}'>`;
+        for (const part of result.content) {
+            formattedResult += `<content>${part.text}</content>`;
+        }
+        formattedResults += formattedResult + "</result>";
+    }
+    return `<sources>${formattedResults}</sources>`;
+}
+```
+
+Was this page useful?

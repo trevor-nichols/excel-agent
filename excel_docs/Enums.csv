@@ -1,0 +1,180 @@
+Enums,Enum Description
+Excel.AggregationFunction,Aggregation function for the DataPivotHierarchy.
+Excel.ArrowheadLength,"Specifies the length of an arrowhead in a line, typically used in shape and line formatting."
+Excel.ArrowheadStyle,"Specifies the style of an arrowhead in a line, such as open, closed, or none."
+Excel.ArrowheadWidth,"Specifies the width of an arrowhead in a line, determining its thickness."
+Excel.AutoFillType,The behavior types when AutoFill is used on a range in the workbook.
+Excel.Base64EncodingType,The file type represented by the base64 encoding.
+Excel.BindingType,"Defines the type of binding in an Excel add-in, such as for binding a range or a table."
+Excel.BlockedErrorCellValueSubType,Represents types of #BLOCKED! errors.
+Excel.BorderIndex,"Specifies which border of a range (top, bottom, left, right) is being referenced or styled."
+Excel.BorderLineStyle,"Specifies the line style of a border, such as solid, dashed, or dotted."
+Excel.BorderWeight,"Specifies the weight (thickness) of a border line, such as thin, medium, or thick."
+Excel.BuiltInPivotTableStyle,Represents a built-in PivotTable style
+Excel.BuiltInSlicerStyle,Represents a built-in slicer style.
+Excel.BuiltInStyle,"Represents the built-in styles available in Excel, such as ""Normal"", ""Title"", or ""Accent1""."
+Excel.BuiltInTableStyle,Represents a built-in table style.
+Excel.BusyErrorCellValueSubType,Represents types of #BUSY! errors.
+Excel.CalcErrorCellValueSubType,Represents types of #CALC! errors.
+Excel.CalculationMode,"Specifies the calculation mode for Excel, such as automatic, manual, or automatic except tables."
+Excel.CalculationState,Represents the state of calculation across the entire Excel application.
+Excel.CalculationType,"Defines the type of calculation performed by Excel, such as full or recalculation of dependent cells."
+Excel.CellValueType,Represents the types of the CellValue object.
+Excel.ChartAxisCategoryType,Specifies the type of the category axis.
+Excel.ChartAxisDisplayUnit,"Specifies the unit of display for a chart axis, such as hundreds, thousands, or millions."
+Excel.ChartAxisGroup,"Represents the group of chart axes, such as primary or secondary axes in a chart."
+Excel.ChartAxisPosition,"Specifies the position of an axis in a chart, such as left, right, top, or bottom."
+Excel.ChartAxisScaleType,"Specifies the scale type of a chart axis, such as linear or logarithmic."
+Excel.ChartAxisTickLabelPosition,"Specifies the position of tick labels on a chart axis, such as next to the axis or high/low positions."
+Excel.ChartAxisTickMark,"Specifies the type of tick marks on a chart axis, such as cross, inside, or outside."
+Excel.ChartAxisTimeUnit,Specifies the unit of time for chart axes and data series.
+Excel.ChartAxisType,"Specifies the type of axis in a chart, such as category, value, or series axis."
+Excel.ChartBinType,Specifies the bin type of a histogram chart or pareto chart series.
+Excel.ChartBoxQuartileCalculation,Represents the quartile calculation type of chart series layout. Only applies to a box and whisker chart.
+Excel.ChartColorScheme,"Represents the color scheme applied to a chart, determining how colors are assigned to chart elements."
+Excel.ChartDataLabelPosition,"Specifies the position of data labels in a chart, such as inside, outside, or above the data points."
+Excel.ChartDataSourceType,Specifies the data source type of the chart series.
+Excel.ChartDisplayBlanksAs,"Determines how blanks in the data are displayed in a chart, such as gaps, zero, or connected lines."
+Excel.ChartErrorBarsInclude,Represents which parts of the error bar to include.
+Excel.ChartErrorBarsType,Represents the range type for error bars.
+Excel.ChartGradientStyle,Represents the gradient style of a chart series. This is only applicable for region map charts.
+Excel.ChartGradientStyleType,Represents the gradient style type of a chart series. This is only applicable for region map charts.
+Excel.ChartLegendPosition,"Specifies the position of the legend in a chart, such as top, bottom, left, or right."
+Excel.ChartLineStyle,"Defines the style of lines in a chart, such as solid, dashed, or dotted lines."
+Excel.ChartMapAreaLevel,Represents the mapping level of a chart series. This only applies to region map charts.
+Excel.ChartMapLabelStrategy,Represents the region level of a chart series layout. This only applies to region map charts.
+Excel.ChartMapProjectionType,Represents the region projection type of a chart series layout. This only applies to region map charts.
+Excel.ChartMarkerStyle,"Specifies the style of markers in a chart, such as circle, square, or triangle markers."
+Excel.ChartParentLabelStrategy,Represents the parent label strategy of the chart series layout. This only applies to treemap charts
+Excel.ChartPlotAreaPosition,"Represents the position of the plot area in a chart, where the data is plotted."
+Excel.ChartPlotBy,"Determines how the chart is plotted, such as by rows or by columns."
+Excel.ChartSeriesBy,"Specifies whether the series are by rows or by columns. In Excel on desktop, the ""auto"" option will inspect the source data shape to automatically guess whether the data is by rows or columns. In Excel on the web, ""auto"" will simply default to ""columns""."
+Excel.ChartSeriesDimension,Represents the dimensions when getting values from chart series.
+Excel.ChartSplitType,"Defines how a pie or doughnut chart is split, such as by value, percentage, or custom split."
+Excel.ChartTextHorizontalAlignment,Represents the horizontal alignment for the specified object.
+Excel.ChartTextVerticalAlignment,Represents the vertical alignment for the specified object.
+Excel.ChartTickLabelAlignment,"Specifies the alignment of tick labels on a chart axis, such as center, left, or right alignment."
+Excel.ChartTitlePosition,Represents the position of the chart title.
+Excel.ChartTrendlineType,"Represents the type of trendline in a chart, such as linear, exponential, or moving average."
+Excel.ChartType,"Specifies the type of chart, such as bar, line, pie, or scatter chart."
+Excel.ChartUnderlineStyle,"Defines the underline style for text in a chart, such as single or double underline."
+Excel.ClearApplyTo,"Specifies what aspects of formatting are cleared, such as all formats, contents, or hyperlinks."
+Excel.CloseBehavior,Specifies the close behavior for Workbook.close.
+Excel.CommentChangeType,Represents how the comments in the event were changed.
+Excel.ConditionalCellValueOperator,Represents the operator of the text conditional format type.
+Excel.ConditionalDataBarAxisFormat,Represents the format options for a data bar axis.
+Excel.ConditionalDataBarDirection,Represents the data bar direction within a cell.
+Excel.ConditionalFormatColorCriterionType,Represents the types of color criterion for conditional formatting.
+Excel.ConditionalFormatDirection,Represents the direction for a selection.
+Excel.ConditionalFormatIconRuleType,Represents the types of icon conditional format.
+Excel.ConditionalFormatPresetCriterion,Represents the criteria of the preset criteria conditional format type.
+Excel.ConditionalFormatRuleType,Represents the types of conditional format values.
+Excel.ConditionalFormatType,"Represents the type of conditional formatting, such as data bars, color scales, or icon sets."
+Excel.ConditionalIconCriterionOperator,Represents the operator for each icon criteria.
+Excel.ConditionalRangeBorderIndex,"Specifies which border of a conditional format range (top, bottom, left, right) is referenced."
+Excel.ConditionalRangeBorderLineStyle,"Defines the line style for borders in a conditional format, such as solid, dashed, or dotted."
+Excel.ConditionalRangeFontUnderlineStyle,"Specifies the underline style for text in a conditional format, such as single or double underline."
+Excel.ConditionalTextOperator,Represents the operator of the text conditional format type.
+Excel.ConditionalTopBottomCriterionType,Represents the criteria for the above/below average conditional format type.
+Excel.ConnectErrorCellValueSubType,Represents types of #CONNECT! errors.
+Excel.ConnectorType,"Represents the type of connector line between shapes, such as straight, elbow, or curved."
+Excel.ContentType,"Specifies the content type, often used in file management and data exchange contexts."
+Excel.DataChangeType,"Represents the type of data change in a workbook, such as cell value change, row insertion, or deletion."
+Excel.DataSourceType,Represents a command type of DataConnection.
+Excel.DataValidationAlertStyle,Represents the data validation error alert style. The default is Stop.
+Excel.DataValidationOperator,Represents the data validation operator enum.
+Excel.DataValidationType,Represents the data validation type enum.
+Excel.DateFilterCondition,Enum representing all accepted conditions by which a date filter can be applied. Used to configure the type of PivotFilter that is applied to the field.
+Excel.DeleteShiftDirection,"Specifies the direction to shift cells when a range is deleted, such as up or left."
+Excel.DocumentPropertyItem,"Represents an individual document property, such as title, author, or custom metadata."
+Excel.DocumentPropertyType,"Defines the type of document property, such as string, date, or number."
+Excel.DocumentTaskChangeAction,Represents the type of change recorded in the task change record.
+Excel.DynamicFilterCriteria,"Specifies criteria for dynamic filters, such as filtering for top items, above average, or specific dates."
+Excel.EntityCardLayoutType,Types of entity card layouts.
+Excel.EntityCompactLayoutIcons,"The list of icons available for EntityCompactLayout. An icon displays in the Excel UI, either to the left of the title in a cell that contains an entity card, or to the left of the title of a referenced entity inside an entity card. Selecting the icon opens the entity card."
+Excel.ErrorCellValueType,Represents the types of the ErrorCellValue object.
+Excel.ErrorCodes,"Represents various error codes in Excel, such as division by zero or invalid cell reference errors."
+Excel.EventSource,"Specifies the source of an event, such as a user action or programmatic change."
+Excel.EventTriggerSource,"Specifies the source that triggered an event, such as a user action or a programmatic change."
+Excel.EventType,"Represents the type of event that occurred in Excel, such as a change, click, or calculation event."
+Excel.ExternalErrorCellValueSubType,Represents types of #EXTERNAL! errors.
+Excel.FieldErrorCellValueSubType,Represents types of #FIELD! errors.
+Excel.FillPattern,"Defines the pattern used to fill a cell, such as solid, striped, or dotted patterns."
+Excel.FilterDatetimeSpecificity,"Specifies the level of detail for filtering dates, such as year, month, or day."
+Excel.FilterOn,"Determines the criteria or type of filtering applied to a range, such as values, top items, or custom."
+Excel.FilterOperator,"Specifies the operator used in a filter, such as equals, greater than, or less than."
+Excel.GeometricShapeType,Specifies the shape type for a GeometricShape object.
+Excel.GroupOption,"Represents options for grouping items in Excel, such as by rows or columns."
+Excel.HeaderFooterState,"Indicates the state of a header or footer, such as visible, hidden, or very hidden."
+Excel.HorizontalAlignment,"Specifies the horizontal alignment of content in a cell, such as left, center, or right."
+Excel.IconSet,"Represents a set of icons used in conditional formatting, such as traffic lights or arrows."
+Excel.ImageFittingMode,"Defines how an image fits within a shape or cell, such as stretch, fit, or fill."
+Excel.InsertShiftDirection,Determines the direction in which existing cells will be shifted to accommodate what is being inserted.
+Excel.KeyboardDirection,"Specifies the direction of keyboard input, such as left-to-right or right-to-left."
+Excel.LabelFilterCondition,Enum representing all accepted conditions by which a label filter can be applied. Used to configure the type of PivotFilter that is applied to the field. PivotFilter.criteria.exclusive can be set to true to invert many of these conditions.
+Excel.LinkedDataTypeRefreshMode,Representation of a refresh mode.
+Excel.LinkedDataTypeState,"Represents the state of a linked data type, such as fetching, connected, or disconnected."
+Excel.LoadToType,An enum that specifies the query load to destination.
+Excel.NamedItemScope,"Specifies the scope of a named item, such as workbook or worksheet scope."
+Excel.NamedItemType,"Defines the type of a named item, such as a range, table, or chart."
+Excel.NumberFormatCategory,Represents a category of number formats.
+Excel.NumErrorCellValueSubType,Represents types of #NUM! errors.
+Excel.PageOrientation,"Represents the page orientation for printing, such as portrait or landscape."
+Excel.PaperType,"Specifies the paper size for printing, such as A4, Letter, or Legal."
+Excel.PictureFormat,The format of the image.
+Excel.PivotAxis,Represents the axis from which to get the PivotItems.
+Excel.PivotFilterTopBottomCriterion,Represents the criteria for the top/bottom values filter.
+Excel.PivotFilterType,A simple enum that represents a type of filter for a PivotField.
+Excel.PivotLayoutType,"Defines the layout type for a PivotTable, such as compact, outline, or tabular."
+Excel.PivotTableDateGroupBy,Represents the DateTime Grouping condition.
+Excel.Placement,Specifies the way that an object is attached to its underlying cells.
+Excel.PrintComments,"Specifies how comments should be printed, such as at the end of the sheet or as displayed."
+Excel.PrintErrorType,"Determines how errors are displayed when printing, such as blank, error code, or ""N/A""."
+Excel.PrintMarginUnit,"Represents the unit of measurement for print margins, such as inches or centimeters."
+Excel.PrintOrder,"Specifies the order in which pages are printed, such as by rows first or by columns first."
+Excel.ProtectionSelectionMode,"Defines how selection is handled in a protected worksheet, such as allowing selection of locked cells."
+Excel.QueryError,An enum that specifies the query load error message.
+Excel.RangeCopyType,"Specifies the type of copy operation for a range, such as values only, formats only, or all."
+Excel.RangeUnderlineStyle,"Defines the underline style for text in a range, such as single or double underline."
+Excel.RangeValueType,"Represents the type of value in a range, such as number, text, or formula."
+Excel.ReadingOrder,"Specifies the reading order for text, such as left-to-right or right-to-left."
+Excel.ReferenceValueType,Represents the types of the ReferenceValue object.
+Excel.RefErrorCellValueSubType,Represents types of #REF! errors.
+Excel.RibbonTab,"Represents a tab on the Excel ribbon interface, where custom commands can be added."
+Excel.RowHiddenChangeType,"Indicates the type of change to the visibility of rows, such as hidden or unhidden."
+Excel.SaveBehavior,Specifies the save behavior for Workbook.save.
+Excel.SearchDirection,Specifies the search direction.
+Excel.ShapeAutoSize,Determines the type of automatic sizing allowed.
+Excel.ShapeFillType,Specifies a shape's fill type.
+Excel.ShapeFontUnderlineStyle,The type of underline applied to a font.
+Excel.ShapeLineDashStyle,The dash style for a line.
+Excel.ShapeLineStyle,The style for a line.
+Excel.ShapeScaleFrom,Specifies which part of the shape retains its position when the shape is scaled.
+Excel.ShapeScaleType,Specifies whether the shape is scaled relative to its original or current size.
+Excel.ShapeTextHorizontalAlignment,Specifies the horizontal alignment for the text frame in a shape.
+Excel.ShapeTextHorizontalOverflow,Specifies the horizontal overflow for the text frame in a shape.
+Excel.ShapeTextOrientation,Specifies the orientation for the text frame in a shape.
+Excel.ShapeTextReadingOrder,Specifies the reading order for the text frame in a shape.
+Excel.ShapeTextVerticalAlignment,Specifies the vertical alignment for the text frame in a shape.
+Excel.ShapeTextVerticalOverflow,Specifies the vertical overflow for the text frame in a shape.
+Excel.ShapeType,Specifies the type of a shape.
+Excel.ShapeZOrder,Specifies where in the z-order a shape should be moved relative to other shapes.
+Excel.SheetVisibility,"Specifies the visibility of a worksheet, such as visible, hidden, or very hidden."
+Excel.ShowAsCalculation,The ShowAs calculation function for the DataPivotField.
+Excel.SlicerSortType,Specifies the slicer sort behavior for Slicer.sortBy.
+Excel.SortBy,Represents the sort direction.
+Excel.SortDataOption,"Represents options for sorting data, such as case sensitivity or ignoring diacritics."
+Excel.SortMethod,Represents the ordering method to be used when sorting Chinese characters.
+Excel.SortOn,Represents the part of the cell used as the sorting criteria.
+Excel.SortOrientation,"Defines the orientation of sorting, such as sorting by rows or by columns."
+Excel.SpecialCellType,"Specifies special types of cells, such as blanks, constants, or formulas."
+Excel.SpecialCellValueType,"Represents specific types of cell values, such as text, numbers, or errors."
+Excel.SpillErrorCellValueSubType,Represents types of #SPILL! errors.
+Excel.SubtotalLocationType,"Specifies where subtotals are displayed, such as at the top or bottom of a group."
+Excel.TimeoutErrorCellValueSubType,Represents types of #TIMEOUT! errors.
+Excel.TopBottomSelectionType,"A simple enum for top/bottom filters to select whether to filter by the top N or bottom N percent, number, or sum of values."
+Excel.ValueErrorCellValueSubType,Represents types of #VALUE! errors.
+Excel.ValueFilterCondition,Enum representing all accepted conditions by which a value filter can be applied. Used to configure the type of PivotFilter that is applied to the field. PivotFilter.exclusive can be set to true to invert many of these conditions.
+Excel.VerticalAlignment,"Specifies the vertical alignment of content in a cell, such as top, middle, or bottom."
+Excel.WorkbookLinksRefreshMode,Represents the refresh mode of the workbook links.
+Excel.WorksheetPositionType,The position of a worksheet relative to another worksheet or the entire worksheet collection.

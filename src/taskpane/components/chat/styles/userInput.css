@@ -1,0 +1,178 @@
+/* 
+* File: src/taskpane/components/chat/styles/userInput.css
+* CSS styles for UserInput component
+* Dependencies: Used by UserInput.tsx
+*/
+
+/* CSS variables for FluentUI tokens */
+:root {
+  --colorNeutralStroke2: rgba(0, 0, 0, 0.1);
+  --colorNeutralBackground1: #ffffff;
+  --colorNeutralBackground2: #f5f5f5;
+  --colorNeutralBackground3: #eeeeee;
+  --colorNeutralBackground3Hover: #e6e6e6;
+  --colorNeutralStroke1: rgba(0, 0, 0, 0.2);
+  --colorBrandStroke2: rgba(0, 120, 212, 0.3);
+  --colorBrandStroke1: rgba(0, 120, 212, 0.8);
+  --colorBrandBackground: #0078d4;
+  --colorBrandBackgroundHover: #106ebe;
+  --colorNeutralForegroundOnBrand: #ffffff;
+  --fontSizeBase300: 14px;
+  --fontSizeBase200: 12px;
+  --fontSizeBase100: 10px;
+  --colorNeutralForeground3: #616161;
+  --colorPaletteRedForeground1: #d13438;
+  --colorBrandBackground2: rgba(0, 120, 212, 0.1);
+  --colorBrandForeground2: #0078d4;
+}
+
+.user-input-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--colorNeutralBackground1);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  margin-top: 8px;
+}
+
+.user-input-row {
+  display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.user-input-textarea {
+  flex-grow: 1;
+  min-height: 44px;
+  max-height: 120px;
+  resize: none;
+  padding: 10px 12px;
+  border-radius: 24px;
+  border: 1px solid var(--colorNeutralStroke2);
+  background-color: var(--colorNeutralBackground2);
+  transition: all 0.2s ease;
+}
+
+.user-input-textarea:focus {
+  border-color: var(--colorBrandStroke1);
+  outline: none;
+  box-shadow: 0 0 0 2px var(--colorBrandStroke1Hover);
+}
+
+.worksheet-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.worksheet-tag {
+  display: flex;
+  align-items: center;
+  background-color: var(--colorNeutralBackground2);
+  padding: 4px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--colorNeutralStroke2);
+}
+
+.worksheet-tag:hover {
+  background-color: var(--colorNeutralBackground3);
+}
+
+.active-tag {
+  background-color: var(--colorBrandBackground);
+  color: var(--colorNeutralForegroundOnBrand);
+  border-color: transparent;
+}
+
+.active-tag:hover {
+  background-color: var(--colorBrandBackgroundHover);
+}
+
+.buttons-container {
+  display: flex;
+  align-items: flex-end;
+  margin-left: 8px;
+}
+
+.input-button {
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.worksheet-menu-container {
+  position: absolute;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: var(--colorNeutralBackground1);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  width: 200px;
+  border: 1px solid var(--colorNeutralStroke2);
+}
+
+.worksheet-menu-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.worksheet-menu-item:hover {
+  background-color: var(--colorNeutralBackground3);
+}
+
+.badge {
+  width: 8px;
+  height: 8px;
+  margin-left: 6px;
+}
+
+.mention-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.mention-tag {
+  background-color: var(--colorBrandBackground2);
+  color: var(--colorBrandForeground1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.mention-highlight {
+  background-color: var(--colorBrandBackground2);
+  color: var(--colorBrandForeground1);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-weight: 500;
+}
+
+.tooltip-content {
+  padding: 8px;
+  font-size: 12px;
+}
+
+.character-count {
+  position: absolute;
+  right: 60px;
+  bottom: 12px;
+  font-size: 12px;
+  color: var(--colorNeutralForeground3);
+}
+
+.limit-reached {
+  color: var(--colorPaletteRedForeground1);
+} 
