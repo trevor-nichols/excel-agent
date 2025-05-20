@@ -217,46 +217,6 @@ const UserInput: React.FC<UserInputProps> = ({
     }
   };
 
-  // Format message with highlighted mentions
-  const formatMessageWithMentions = () => {
-    const parts = [];
-    let lastIndex = 0;
-    const regex = /@(\w+)/g;
-    let match;
-    
-    while ((match = regex.exec(message)) !== null) {
-      // Add text before the match
-      if (match.index > lastIndex) {
-        parts.push(message.substring(lastIndex, match.index));
-      }
-      
-      const worksheetName = match[1];
-      const isValidWorksheet = worksheetNames.some(
-        name => name.toLowerCase() === worksheetName.toLowerCase()
-      );
-      
-      // Add the mention with proper styling
-      if (isValidWorksheet) {
-        parts.push(
-          <span key={match.index} className="mention-highlight">
-            @{worksheetName}
-          </span>
-        );
-      } else {
-        parts.push(`@${worksheetName}`);
-      }
-      
-      lastIndex = match.index + match[0].length;
-    }
-    
-    // Add remaining text
-    if (lastIndex < message.length) {
-      parts.push(message.substring(lastIndex));
-    }
-    
-    return parts;
-  };
-
   // Toggle worksheet selection
   const toggleWorksheet = (worksheet: string) => {
     setSelectedWorksheets((prev) => 
