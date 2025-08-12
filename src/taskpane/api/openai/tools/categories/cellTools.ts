@@ -5,12 +5,12 @@
  * Used by: toolDefinitions.ts to create the complete set of tools
  */
 
-import OpenAI from "openai";
+import type { ChatCompletionTool } from "../../../../types/openai";
 
 /**
  * Gets tool definitions for cell operations
  */
-export function getCellTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
+export function getCellTools(): ChatCompletionTool[] {
   return [
     {
       type: "function",

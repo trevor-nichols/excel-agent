@@ -5,13 +5,13 @@
  * Used by: toolDefinitions.ts to create the complete set of tools
  */
 
-import OpenAI from "openai";
+import type { ChatCompletionTool } from "../../../../types/openai";
 import { ChartType, PivotAggregationFunction } from "../../../../types";
 
 /**
  * Gets tool definitions for chart and visualization operations
  */
-export function getChartTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
+export function getChartTools(): ChatCompletionTool[] {
   return [
     {
       type: "function",

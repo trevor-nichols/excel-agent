@@ -1422,7 +1422,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
       <div className={`${styles.root} ${fadeInMain ? styles.fadeIn : ""}`}>
         <Header logo="assets/logo-filled.png" title={props.title} onSettingsClick={() => setShowSettings(true)} />
         <div className={styles.content}>
-          <ChatInterface apiKey={apiKey} setIsLoading={setIsLoading} />
+          <ChatInterface setIsLoading={setIsLoading} />
         </div>
         {showSettings && (
           <SettingsPanel onClose={() => setShowSettings(false)} apiKey={apiKey} onApiKeyChange={handleApiKeyChange} />

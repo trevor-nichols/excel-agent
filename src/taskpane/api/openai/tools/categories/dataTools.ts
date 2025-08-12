@@ -5,13 +5,13 @@
  * Used by: toolDefinitions.ts to create the complete set of tools
  */
 
-import OpenAI from "openai";
+import type { ChatCompletionTool } from "../../../../types/openai";
 import { FilterTypes } from "../../../../types";
 
 /**
  * Gets tool definitions for data operations
  */
-export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
+export function getDataTools(): ChatCompletionTool[] {
   return [
     {
       type: "function",
