@@ -1,36 +1,59 @@
 /**
  * File: src/taskpane/api/openai/client.ts
- * Provides functions for initializing and managing the OpenAI client
- * Dependencies: OpenAI SDK
- * Used by: useAI hook, embedding operations
+ * Provides functions for calling our server OpenAI proxy
  */
 
-import OpenAI from "openai";
-import { getToolDefinitions } from "./tools/toolDefinitions";
-
-// Hard-coded API key as requested
-const OPENAI_API_KEY = "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";
-
-/**
- * Initialize and return an OpenAI client with the provided API key
- * If no API key is provided, it will use the hard-coded key
- */
-export function getOpenAIClient(apiKey?: string): OpenAI {
-  // Use provided API key or fall back to hard-coded key
-  const key = apiKey || OPENAI_API_KEY;
-  
-  if (!key) {
-    throw new Error("OpenAI API key is required.");
-  }
-  
-  return new OpenAI({
-    apiKey: key,
-    dangerouslyAllowBrowser: true // Required for client-side usage in Office Add-ins
-  });
+export interface CreateChatRequest {
+  messages: import("../../types/openai").ChatMessage[];
+  tools?: import("../../types/openai").ChatCompletionTool[];
+  model?: string;
 }
 
-/**
- * Re-export getToolDefinitions from the new modular structure
- * This maintains backward compatibility for any existing code
- */
-export { getToolDefinitions }; 
+export interface CreateChatResponse {
+  message: import("../../types/openai").ChatMessage;
+}
+
+const DEFAULT_MODEL = "gpt-4o-mini";
+
+export async function createChatCompletion(body: CreateChatRequest): Promise<CreateChatResponse> {
+  const response = await fetch("/api/openai/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: body.model ?? DEFAULT_MODEL, messages: body.messages, tools: body.tools })
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`OpenAI chat error: ${response.status} ${text}`);
+  }
+
+  return response.json();
+}
+
+export interface CreateEmbeddingRequest {
+  input: string;
+  model?: string;
+}
+
+export interface CreateEmbeddingResponse {
+  embedding: number[];
+}
+
+const DEFAULT_EMBED_MODEL = "text-embedding-3-large";
+
+export async function createEmbedding(body: CreateEmbeddingRequest): Promise<CreateEmbeddingResponse> {
+  const response = await fetch("/api/openai/embeddings", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ model: body.model ?? DEFAULT_EMBED_MODEL, input: body.input })
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`OpenAI embedding error: ${response.status} ${text}`);
+  }
+
+  return response.json();
+}
+
+export { getToolDefinitions } from "./tools/toolDefinitions"; 

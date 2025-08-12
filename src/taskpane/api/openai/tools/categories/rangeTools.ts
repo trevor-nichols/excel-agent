@@ -5,13 +5,13 @@
  * Used by: toolDefinitions.ts to create the complete set of tools
  */
 
-import OpenAI from "openai";
+import type { ChatCompletionTool } from "../../../../types/openai";
 
 /**
  * Gets tool definitions for range operations
  * @param selectedRange Optional information about the currently selected range
  */
-export function getRangeTools(selectedRange?: { address: string, rowCount: number, columnCount: number }): OpenAI.Chat.Completions.ChatCompletionTool[] {
+export function getRangeTools(selectedRange?: { address: string, rowCount: number, columnCount: number }): ChatCompletionTool[] {
   return [
     {
       type: "function",

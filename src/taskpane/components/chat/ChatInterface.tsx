@@ -3,7 +3,7 @@
 /**
  * File: src/taskpane/components/chat/ChatInterface.tsx
  * Main chat interface component for interacting with the AI assistant
- * Dependencies: React, FluentUI, OpenAI SDK, custom hooks (useChatMessages, useAI, useWorksheets)
+ * Dependencies: React, FluentUI, server OpenAI API, custom hooks (useChatMessages, useAI, useWorksheets)
  * Used by: App component as the main taskpane interface
  */
 
@@ -31,7 +31,6 @@ import {
   embedAllWorksheets
 } from "../../api";
 import { getSelectedRangeInfo } from "../../api/excel/cellOperations";
-import { getOpenAIClient } from "../../api/openai/client";
 import "./styles/chat.css";
 
 /**
@@ -102,11 +101,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ setIsLoading }) => {
 
       // Create embeddings for any tagged worksheets
       if (taggedWorksheets && taggedWorksheets.length > 0) {
-        const openai = getOpenAIClient();
         for (const worksheetName of taggedWorksheets) {
           try {
-            // Pre-fetch the embeddings to ensure they're available
-            await embedWorksheet(openai, worksheetName);
+            await embedWorksheet(worksheetName);
           } catch (error) {
             console.error(`Error embedding worksheet ${worksheetName}:`, error);
           }
@@ -164,8 +161,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ setIsLoading }) => {
   const handleEmbedding = async (worksheetName: string) => {
     try {
       setLoading(true);
-      const openai = getOpenAIClient();
-      await embedWorksheet(openai, worksheetName);
+      await embedWorksheet(worksheetName);
       addAssistantMessage(`Successfully created embedding for worksheet "${worksheetName}".`);
     } catch (error) {
       console.error("Error embedding worksheet:", error);
@@ -181,8 +177,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ setIsLoading }) => {
   const handleEmbedAllWorksheets = async () => {
     try {
       setLoading(true);
-      const openai = getOpenAIClient();
-      await embedAllWorksheets(openai);
+      await embedAllWorksheets();
       addAssistantMessage("Successfully created embeddings for all worksheets.");
     } catch (error) {
       console.error("Error embedding all worksheets:", error);

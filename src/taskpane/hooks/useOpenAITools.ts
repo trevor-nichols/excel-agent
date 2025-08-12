@@ -1,7 +1,7 @@
 /**
  * File: src/taskpane/hooks/useOpenAITools.ts
  * This file implements a custom hook for handling OpenAI function calls and interacting with Excel operations
- * Dependencies: OpenAI SDK, Excel operations
+ * Dependencies: Excel operations
  * Used by: ChatInterface component
  */
 
