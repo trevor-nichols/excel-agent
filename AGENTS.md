@@ -3,16 +3,14 @@ You are an intelligent senior software developer and AI code generator responsib
 
 Your Requirements:
 - Maintain a clean, organized and modular codebase by seperating code out code logically into appropriate files, directories, sub-directories.
-- Do not let any file exceed ~250 lines of code.
 - Always use the latest libraries and tools as of 2025.
 - Take a modular approach by creating new files where needed, sectioning out code into logical files.
 - When encountering syntax errors or bugs, carefully examine the full file content before making changes
 - Leave begineer friendly comments logically sectioning out each file with headers describing what each section does.
-</system_prompt>
+
 You're creating an Excel task bin tool that uses the OpenAI API to do everything for users in Excel. 
 
 # src/taskpane/api/
-Okay, let's break down the structure and purpose of the files and directories you've highlighted within the `src/taskpane/api` directory. This area is crucial as it defines the bridge between the Excel JavaScript API and the OpenAI API, enabling the AI to interact with the user's spreadsheet.
 
 **Core Directories:**
 
@@ -203,101 +201,3 @@ Okay, let's analyze the custom React hooks within the `src/taskpane/hooks` direc
 
 In essence, these hooks effectively separate concerns: managing worksheet state (`useWorksheets`), handling chat history (`useChatMessages`), orchestrating AI communication (`useAI`), and executing AI-requested Excel actions (`useOpenAITools`). The barrel file (`index.ts`) just makes them easier to import elsewhere.
 
-
-<project_structure>
-.
-├── .hintrc
-├── README.md
-├── assets
-├── babel.config.json
-├── excel_docs
-│   ├── Classes.csv
-│   ├── Enums.csv
-│   ├── Functions.csv
-│   ├── Interfaces.csv
-│   ├── Type Aliases.csv
-│   ├── excel_api_operation_listing.csv
-│   ├── excel_api_operation_listing.json
-├── manifest.xml
-├── package.json
-├── src
-│   ├── assets
-│   ├── commands
-│   │   ├── commands.html
-│   │   ├── commands.ts
-│   ├── taskpane
-│   │   ├── App.tsx
-│   │   ├── api
-│   │   │   ├── embeddingOperations.ts
-│   │   │   ├── excel
-│   │   │   │   ├── cellOperations.ts
-│   │   │   │   ├── chartOperations.ts
-│   │   │   │   ├── dataOperations.ts
-│   │   │   │   ├── formatOperations.ts
-│   │   │   │   ├── index.ts
-│   │   │   │   ├── rangeOperations.ts
-│   │   │   │   ├── worksheetOperations.ts
-│   │   │   ├── index.ts
-│   │   │   ├── openai
-│   │   │   │   ├── client.ts
-│   │   │   │   ├── embeddingOperations.ts
-│   │   │   │   ├── index.ts
-│   │   │   │   ├── tools
-│   │   │   │   │   ├── categories
-│   │   │   │   │   │   ├── cellTools.ts
-│   │   │   │   │   │   ├── chartTools.ts
-│   │   │   │   │   │   ├── dataTools.ts
-│   │   │   │   │   │   ├── formatTools.ts
-│   │   │   │   │   │   ├── index.ts
-│   │   │   │   │   │   ├── rangeTools.ts
-│   │   │   │   │   │   ├── worksheetTools.ts
-│   │   │   │   │   ├── index.ts
-│   │   │   │   │   ├── toolDefinitions.ts
-│   │   ├── assets
-│   │   ├── components
-│   │   │   ├── App.tsx
-│   │   │   ├── ChatInterface.tsx
-│   │   │   ├── Header.tsx
-│   │   │   ├── MessageItem.tsx
-│   │   │   ├── MessageList.tsx
-│   │   │   ├── SettingsPanel.tsx
-│   │   │   ├── SplashScreen.tsx
-│   │   │   ├── UserInput.tsx
-│   │   │   ├── chat
-│   │   │   │   ├── ChatInterface.tsx
-│   │   │   │   ├── MarkdownRenderer.tsx
-│   │   │   │   ├── MessageItem.tsx
-│   │   │   │   ├── MessageList.tsx
-│   │   │   │   ├── TypingIndicator.tsx
-│   │   │   │   ├── UserInput.tsx
-│   │   │   │   ├── styles
-│   │   │   │   │   ├── chat.css
-│   │   │   │   │   ├── userInput.css
-│   │   │   ├── shared
-│   │   │   │   ├── Header.tsx
-│   │   │   │   ├── SplashScreen.tsx
-│   │   │   │   ├── styles
-│   │   │   │   │   ├── header.css
-│   │   │   │   │   ├── splashScreen.css
-│   │   ├── embedding_operations.ts
-│   │   ├── excelOperations.ts
-│   │   ├── hooks
-│   │   │   ├── index.ts
-│   │   │   ├── useAI.ts
-│   │   │   ├── useChatMessages.ts
-│   │   │   ├── useOpenAITools.ts
-│   │   │   ├── useWorksheets.ts
-│   │   ├── index.tsx
-│   │   ├── scanExcelApi.js
-│   │   ├── styles
-│   │   │   ├── global.css
-│   │   ├── taskpane.css
-│   │   ├── taskpane.html
-│   │   ├── taskpane.ts
-│   │   ├── types
-│   │   │   ├── index.ts
-│   │   ├── utils
-│   │   │   ├── scanExcelApi.js
-├── tsconfig.json
-├── webpack.config.js
-</project_structure>
