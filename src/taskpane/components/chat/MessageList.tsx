@@ -16,19 +16,21 @@ interface MessageListProps {
   messages: Message[];
   worksheetNames: string[];
   isTyping?: boolean;
+  streamingAssistantText?: string;
 }
 
 const MessageList: React.FC<MessageListProps> = ({ 
   messages, 
   worksheetNames, 
-  isTyping = false 
+  isTyping = false,
+  streamingAssistantText = ""
 }) => {
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages change or when typing indicator appears/disappears
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+  }, [messages, isTyping, streamingAssistantText]);
 
   // Show empty state when there are no messages
   if (messages.length === 0) {
@@ -57,11 +59,20 @@ const MessageList: React.FC<MessageListProps> = ({
       ))}
       
       {isTyping && (
-        <div className="typing-indicator">
-          <div className="typing-dot"></div>
-          <div className="typing-dot"></div>
-          <div className="typing-dot"></div>
-        </div>
+        streamingAssistantText ? (
+          <MessageItem 
+            isUser={false} 
+            worksheetNames={worksheetNames}
+          >
+            {streamingAssistantText}
+          </MessageItem>
+        ) : (
+          <div className="typing-indicator">
+            <div className="typing-dot"></div>
+            <div className="typing-dot"></div>
+            <div className="typing-dot"></div>
+          </div>
+        )
       )}
       
       <div ref={messagesEndRef} />

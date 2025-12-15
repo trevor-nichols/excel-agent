@@ -18,6 +18,7 @@ export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
       function: {
         name: "enable_filter_ui",
         description: "Enable Excel's built-in AutoFilter dropdown UI on a range, allowing users to filter data using Excel's native interface",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -31,6 +32,7 @@ export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
             },
           },
           required: [],
+          additionalProperties: false,
         },
       },
     },
@@ -39,6 +41,7 @@ export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
       function: {
         name: "filter_data",
         description: "Filter data in Excel based on specified criteria",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -68,6 +71,7 @@ export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
                     }
                   },
                   required: ["value"],
+                  additionalProperties: false,
                   description: "For Equals, GreaterThan, LessThan, and Contains filter types"
                 },
                 {
@@ -83,6 +87,7 @@ export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
                     }
                   },
                   required: ["lowerBound", "upperBound"],
+                  additionalProperties: false,
                   description: "For Between filter type"
                 },
                 {
@@ -95,12 +100,14 @@ export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
                     }
                   },
                   required: ["values"],
+                  additionalProperties: false,
                   description: "For Values filter type"
                 }
               ]
             },
           },
           required: ["column", "filterType", "criteria"],
+          additionalProperties: false,
         },
       },
     },
@@ -109,6 +116,7 @@ export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
       function: {
         name: "sort_data",
         description: "Sort data in an Excel range based on specified criteria",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -141,6 +149,7 @@ export function getDataTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
             hasHeaders: { type: "boolean", description: "Whether the range has a header row" },
           },
           required: ["sortFields"],
+          additionalProperties: false,
         },
       },
     },

@@ -20,6 +20,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
         description: selectedRange ? 
           `Write values to the currently selected range in Excel (${selectedRange.address}, ${selectedRange.rowCount}x${selectedRange.columnCount}). If the input is larger, it will be trimmed to fit.` :
           "Write values to the currently selected range in Excel. If the input is larger, it will be trimmed to fit.",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -37,6 +38,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
             },
           },
           required: ["values"],
+          additionalProperties: false,
         },
       },
     },
@@ -45,6 +47,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
       function: {
         name: "read_range",
         description: "Read values from a specific range or the currently selected range in Excel",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -54,6 +57,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
                 "The range address to read from (e.g., 'A1:B5'). If not provided, reads from the currently selected range.",
             },
           },
+          additionalProperties: false,
         },
       },
     },
@@ -62,6 +66,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
       function: {
         name: "analyze_data",
         description: "Analyze data from a 2D array with different analysis methods",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -82,6 +87,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
             },
           },
           required: ["values", "analysisType"],
+          additionalProperties: false,
         },
       },
     },
@@ -90,6 +96,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
       function: {
         name: "merge_cells",
         description: "Merge cells in a specified range",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -104,6 +111,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
             },
           },
           required: ["range"],
+          additionalProperties: false,
         },
       },
     },
@@ -112,6 +120,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
       function: {
         name: "unmerge_cells",
         description: "Unmerge cells in a specified range",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -121,6 +130,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
             },
           },
           required: ["range"],
+          additionalProperties: false,
         },
       },
     },
@@ -129,6 +139,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
       function: {
         name: "autofit_columns",
         description: "Auto-fit columns in a specified range",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -138,6 +149,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
             },
           },
           required: ["range"],
+          additionalProperties: false,
         },
       },
     },
@@ -146,6 +158,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
       function: {
         name: "autofit_rows",
         description: "Auto-fit rows in a specified range",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -155,6 +168,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
             },
           },
           required: ["range"],
+          additionalProperties: false,
         },
       },
     },
@@ -163,6 +177,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
       function: {
         name: "analyze_selected_range",
         description: "Analyze the data in the currently selected range in Excel",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -173,6 +188,7 @@ export function getRangeTools(selectedRange?: { address: string, rowCount: numbe
             },
           },
           required: ["analysisType"],
+          additionalProperties: false,
         },
       },
     },

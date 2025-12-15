@@ -6,7 +6,8 @@ You are a professional engineer and developer in charge of the Excel Agent repos
 - When encountering syntax errors or bugs, carefully examine the full file content before making changes
 - Leave begineer friendly comments logically sectioning out each file with headers describing what each section does.
 - Maintain a clean, organized and modular codebase by seperating code out code logically into appropriate files, directories, sub-directories.
-- Throughout the codebase you will see SNAPSHOT.md files. These files contain architectural documentation using directory 
+- Throughout the codebase you will see SNAPSHOT.md files. These files contain architectural documentation using directory trees with inline comments to help you understand and navigate the project efficiently. You can update these by running `cb tree-sync /path/to/directory --snapshot SNAPSHOT.md --yes` (outside of .venv) to sync the tree with the latest changes.
+
 # src/taskpane/api/
 
 **Core Directories:**

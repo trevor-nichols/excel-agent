@@ -28,6 +28,7 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
+    "@openai/agents": "^0.3.4",
     "@fluentui/react-components": "^9.46.8",
     "@fluentui/react-icons": "^2.0.232",
     "@types/react-syntax-highlighter": "^15.5.13",

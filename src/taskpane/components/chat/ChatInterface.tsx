@@ -48,6 +48,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ setIsLoading }) => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [showWelcome, setShowWelcome] = React.useState(true);
+  const [streamingText, setStreamingText] = React.useState<string>("");
 
   // Custom hooks
   const { messages, addUserMessage, addAssistantMessage, addErrorMessage, clearMessages } = useChatMessages();
@@ -77,6 +78,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ setIsLoading }) => {
       addUserMessage(text, taggedWorksheets);
       setLoading(true);
       setError(null);
+      setStreamingText("");
 
       // Special commands for embedding
       if (text.toLowerCase().includes("embed worksheet")) {
@@ -140,7 +142,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ setIsLoading }) => {
         openaiMessages,
         selectedRangeInfo,
         activeWorksheet,
-        taggedWorksheets
+        taggedWorksheets,
+        {
+          onTextDelta: (partial) => setStreamingText(partial),
+          trace: false,
+        }
       );
 
       // Add AI response to chat
@@ -155,6 +161,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ setIsLoading }) => {
       addErrorMessage(error instanceof Error ? error.message : "An error occurred while sending your message.");
     } finally {
       setLoading(false);
+      setStreamingText("");
     }
   };
 
@@ -231,6 +238,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ setIsLoading }) => {
           messages={messages} 
           worksheetNames={worksheetNames} 
           isTyping={loading}
+          streamingAssistantText={streamingText}
         />
       </div>
       

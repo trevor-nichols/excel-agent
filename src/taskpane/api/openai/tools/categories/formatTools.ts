@@ -17,6 +17,7 @@ export function getFormatTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
       function: {
         name: "format_cell",
         description: "Format the appearance of a cell in Excel",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -38,6 +39,7 @@ export function getFormatTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
             },
           },
           required: ["cellAddress"],
+          additionalProperties: false,
         },
       },
     },
@@ -46,6 +48,7 @@ export function getFormatTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
       function: {
         name: "apply_conditional_format",
         description: "Apply a conditional format to a range in Excel",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -77,6 +80,7 @@ export function getFormatTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
             },
           },
           required: ["range", "formatType", "rule"],
+          additionalProperties: false,
         },
       },
     },
@@ -85,6 +89,7 @@ export function getFormatTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
       function: {
         name: "clear_conditional_formats",
         description: "Clear all conditional formats from a range in Excel",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -94,6 +99,7 @@ export function getFormatTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
             },
           },
           required: ["range"],
+          additionalProperties: false,
         },
       },
     },

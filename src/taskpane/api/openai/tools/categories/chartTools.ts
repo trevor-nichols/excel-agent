@@ -18,6 +18,7 @@ export function getChartTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
       function: {
         name: "add_chart",
         description: "Add a chart to the Excel worksheet",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -33,14 +34,16 @@ export function getChartTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
             },
           },
           required: ["dataRange", "chartType"],
+          additionalProperties: false,
         },
       },
     },
     {
       type: "function",
       function: {
-        name: "add_pivot",
+        name: "add_pivot_table",
         description: "Add a pivot table to the Excel worksheet",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -85,6 +88,7 @@ export function getChartTools(): OpenAI.Chat.Completions.ChatCompletionTool[] {
             },
           },
           required: ["sourceDataRange", "destinationCell", "rowFields", "columnFields", "dataFields"],
+          additionalProperties: false,
         },
       },
     },

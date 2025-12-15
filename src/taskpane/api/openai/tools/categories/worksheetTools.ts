@@ -17,6 +17,7 @@ export function getWorksheetTools(): OpenAI.Chat.Completions.ChatCompletionTool[
       function: {
         name: "manage_worksheet",
         description: "Create a new worksheet or delete an existing one in Excel",
+        strict: true,
         parameters: {
           type: "object",
           properties: {
@@ -31,6 +32,7 @@ export function getWorksheetTools(): OpenAI.Chat.Completions.ChatCompletionTool[
             },
           },
           required: ["action", "sheetName"],
+          additionalProperties: false,
         },
       },
     },
@@ -39,10 +41,12 @@ export function getWorksheetTools(): OpenAI.Chat.Completions.ChatCompletionTool[
       function: {
         name: "get_worksheet_names",
         description: "Get the names of all worksheets in the current workbook",
+        strict: true,
         parameters: {
           type: "object",
           properties: {},
           required: [],
+          additionalProperties: false,
         },
       },
     },
@@ -51,10 +55,12 @@ export function getWorksheetTools(): OpenAI.Chat.Completions.ChatCompletionTool[
       function: {
         name: "get_active_worksheet_name",
         description: "Get the name of the currently active worksheet",
+        strict: true,
         parameters: {
           type: "object",
           properties: {},
           required: [],
+          additionalProperties: false,
         },
       },
     },
